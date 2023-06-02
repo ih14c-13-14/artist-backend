@@ -23,7 +23,7 @@
 	"engines": {
 		"pnpm": "use yarn instead.",
 		"npm": "use yarn instead.",
-		"yarn": "1.22.19"
+		"yarn": ">= 1.22.0"
 	},
 	"dependencies": {
 		"@nestjs/common": "^9.0.0",
