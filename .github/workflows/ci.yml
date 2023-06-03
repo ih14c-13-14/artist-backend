@@ -1,0 +1,28 @@
+name: CI
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
+    branches:
+      - main
+
+jobs:
+  Build:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup asdf
+        uses: asdf-vm/actions/setup@v2
+        # 2回目以降エラーが出るが問題なし
+        continue-on-error: true
+      - name: asdf install
+        uses: asdf-vm/actions/install@v2
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Build
+        run: yarn build
