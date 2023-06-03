@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/base:dev-bullseye AS base
+FROM mcr.microsoft.com/devcontainers/base:dev-bullseye
 
 SHELL ["/bin/bash", "-lc"]
 
