@@ -1,2 +1,4 @@
 nodejs 18.16.0
 yarn  1.22.19
+awscli 2.11.25
+python 3.11.3
