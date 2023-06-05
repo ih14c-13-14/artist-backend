@@ -12,7 +12,7 @@
 		"start:dev": "nest start --watch",
 		"start:debug": "nest start --debug --watch",
 		"start:prod": "node dist/main",
-		"lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+		"lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
 		"test": "jest",
 		"test:watch": "jest --watch",
 		"test:cov": "jest --coverage",
@@ -21,7 +21,6 @@
 		"submodule-update": "cd $(git rev-parse --show-superproject-working-tree --show-toplevel | head -1)/schema && git fetch && git checkout origin/main"
 	},
 	"engines": {
-		"pnpm": "use yarn instead.",
 		"npm": "use yarn instead.",
 		"yarn": ">= 1.22.0"
 	},
