@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# 前のHEAD、新しいHEAD、そしてチェックアウトの種類（1 = 新しいブランチ、0 = 既存のブランチ）を取得
+previous_head=$1
+new_head=$2
+checkout_type=$3
+
+# 新しいブランチが作成された場合だけ origin/main をフェッチ
+if [ "$checkout_type" -eq 1 ]; then
+  git fetch origin main
+	if [ "$(git log --pretty=format:'%H' -n 1 main)" != "$(git log --pretty=format:'%H' -n 1 origin/main)" ]; then
+		echo -e "\033[31mWarning: Your local main is behind the remote one.\033[0m"
+	fi
+fi

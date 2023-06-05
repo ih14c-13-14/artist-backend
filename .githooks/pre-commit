@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Check for files with credentials, excluding .env.example
+if git diff --cached --name-only | grep -E 'credentials|\.env' | grep -v '.env.example'; then
+    echo "Error: You have committed a file with credentials."
+    echo "Please remove the file and try again."
+    exit 1
+fi
+
+# コミット対象がmainだった場合にブロックする
+if git branch --show-current | grep -E 'main'; then
+    echo "Error: You have committed to main branch."
+    echo "Please commit to another branch and try again."
+    exit 1
+fi
