@@ -56,6 +56,9 @@ jobs:
         continue-on-error: true
       - name: asdf install
         uses: asdf-vm/actions/install@v2
+      - name: setup env files
+        run: |
+          cp .env.example .env
       - name: Install dependencies
         run: yarn install --immutable
       - name: Check Format
