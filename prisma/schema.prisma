@@ -1,16 +1,98 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 generator erd {
-	provider = "prisma-erd-generator"
-	output   = "./erd.md"
-	// TODO: FK表現できないか
+  provider = "prisma-erd-generator"
+  output   = "./erd.md"
+  // TODO: FK表現できないか
 }
 
 generator client {
-	provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-	provider = "postgresql"
-	url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  id            String       @id @db.Char(33)
+  email         String       @unique @db.VarChar(255)
+  password      String       @db.VarChar(255) /// TODO: #10|ハッシュ化されたパスワードの桁数の調査
+  age_group     Int          @db.SmallInt
+  gender        Int          @db.SmallInt
+  created_at    DateTime     @default(now()) @db.Timestamp(6)
+  updated_at    DateTime     @updatedAt @db.Timestamp(6)
+  prefecture_id String       @db.Char(33)
+  prefecture    prefectures  @relation(fields: [prefecture_id], references: [id])
+  arts_users    arts_users[]
+  stamps        stamps[]
+}
+
+model prefectures {
+  id    String  @id @db.Char(33)
+  name  String  @unique @db.VarChar(4)
+  users users[]
+}
+
+model areas {
+  code String @id @db.Char(3)
+  name String @db.VarChar(255)
+  arts arts[]
+}
+
+model institutions {
+  id                String                       @id @db.Char(33)
+  place_id          String                       @db.Text /// NOTE: Google Maps APIの制約で上限がない
+  longitude         Unsupported("numeric(9, 6)") /// HACK: Prismaがnumeric対応しないため
+  latitude          Unsupported("numeric(8, 6)") /// HACK: Prismaがnumeric対応しないため
+  address           String                       @db.VarChar(255)
+  admission_fee     Int                          @db.Integer
+  updated_at        DateTime                     @updatedAt @db.Timestamp(6)
+  arts_institutions arts_institutions[]
+}
+
+model arts {
+  id                String              @id @db.Char(33)
+  area_code         String              @db.Char(3)
+  name              String              @db.VarChar(255)
+  name_kana         String              @db.VarChar(255)
+  author_name       String              @db.VarChar(255)
+  author_name_kana  String              @db.VarChar(255)
+  created_year      Int                 @db.Integer
+  description       String              @db.Text
+  image_path        String              @db.VarChar(255)
+  created_at        DateTime            @default(now()) @db.Timestamp(6)
+  updated_at        DateTime            @updatedAt @db.Timestamp(6)
+  area              areas               @relation(fields: [area_code], references: [code])
+  arts_institutions arts_institutions[]
+  arts_users        arts_users[]
+  stamps            stamps[]
+}
+
+model stamps {
+  user_id String @db.Char(33)
+  art_id  String @db.Char(33)
+  user    users  @relation(fields: [user_id], references: [id])
+  art     arts   @relation(fields: [art_id], references: [id])
+
+  @@id([user_id, art_id])
+}
+
+model arts_institutions {
+  art_id         String       @db.Char(33)
+  institution_id String       @db.Char(33)
+  art            arts         @relation(fields: [art_id], references: [id])
+  institution    institutions @relation(fields: [institution_id], references: [id])
+
+  @@id([art_id, institution_id])
+}
+
+model arts_users {
+  art_id  String @db.Char(33)
+  user_id String @db.Char(33)
+  art     arts   @relation(fields: [art_id], references: [id])
+  user    users  @relation(fields: [user_id], references: [id])
+
+  @@id([art_id, user_id])
 }
