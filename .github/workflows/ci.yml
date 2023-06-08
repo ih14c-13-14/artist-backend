@@ -43,3 +43,23 @@ jobs:
         run: yarn install --immutable
       - name: Lint
         run: yarn lint
+
+  DB-Validate:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup asdf
+        uses: asdf-vm/actions/setup@v2
+        # 2回目以降エラーが出るが問題なし
+        continue-on-error: true
+      - name: asdf install
+        uses: asdf-vm/actions/install@v2
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Check Format
+        # yarn prisma formatの後にgit statusして差分が出たらfail
+        run: yarn prisma format && git diff --exit-code
+      - name: DB Validate
+        run: yarn prisma validate
