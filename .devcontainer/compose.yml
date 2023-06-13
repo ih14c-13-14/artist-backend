@@ -26,8 +26,22 @@ services:
     networks:
       - devcontainer
 
+  redis:
+    restart: unless-stopped
+    image: redis:7.0.11-alpine3.18
+    networks:
+      - devcontainer
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: "redis-cli ping"
+      interval: 5s
+      retries: 20
+
 volumes:
   postgres-data:
+    driver: local
+  redis-data:
     driver: local
 
 networks:
