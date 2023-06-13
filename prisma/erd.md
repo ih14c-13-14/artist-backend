@@ -27,18 +27,19 @@ erDiagram
   "institutions" {
     String id "🗝️"
     String place_id 
+    Decimal latitude 
+    Decimal longitude 
     String address 
     Int admission_fee 
-    DateTime created_at 
+    DateTime updated_at 
     }
   
 
   "arts" {
     String id "🗝️"
+    Boolean is_public 
     String name 
     String name_kana 
-    String author_name 
-    String author_name_kana 
     Int created_year 
     String description 
     String image_path 
@@ -47,8 +48,17 @@ erDiagram
     }
   
 
+  "authors" {
+    String id "🗝️"
+    String name 
+    String name_kana 
+    DateTime create_at 
+    DateTime updated_at 
+    }
+  
+
   "stamps" {
-    DateTime created_at 
+
     }
   
 
@@ -71,6 +81,8 @@ erDiagram
     "arts" o{--}o "arts_institutions" : "arts_institutions"
     "arts" o{--}o "arts_users" : "arts_users"
     "arts" o{--}o "stamps" : "stamps"
+    "arts" o|--|| "authors" : "authors"
+    "authors" o{--}o "arts" : "arts"
     "stamps" o|--|| "users" : "user"
     "stamps" o|--|| "arts" : "art"
     "arts_institutions" o|--|| "arts" : "art"
