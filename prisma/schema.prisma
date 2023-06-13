@@ -27,6 +27,7 @@ model users {
   prefecture    prefectures  @relation(fields: [prefecture_id], references: [id])
   arts_users    arts_users[]
   stamps        stamps[]
+  Token         Token[]
 }
 
 model prefectures {
@@ -105,4 +106,20 @@ model arts_users {
   user    users  @relation(fields: [user_id], references: [id])
 
   @@id([art_id, user_id])
+}
+
+model Token {
+  id         Int       @id @default(autoincrement())
+  token      String    @unique
+  type       TokenType
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  expired_at DateTime
+  users      users     @relation(fields: [usersId], references: [id])
+  usersId    String    @db.Char(33)
+}
+
+enum TokenType {
+  PASSWORD_RESET
+  EMAIL_CHANGE
 }
