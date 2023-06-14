@@ -31,11 +31,7 @@ EMAIL_CHANGE EMAIL_CHANGE
 
   "institutions" {
     String id "🗝️"
-    String place_id 
-    Decimal latitude 
-    Decimal longitude 
-    String address 
-    Int admission_fee 
+    String admission_fee_description 
     DateTime updated_at 
     }
   
@@ -48,6 +44,9 @@ EMAIL_CHANGE EMAIL_CHANGE
     Int created_year 
     String description 
     String image_path 
+    String datetime_description 
+    String closed_day_description 
+    String address 
     DateTime created_at 
     DateTime updated_at 
     }
@@ -57,6 +56,7 @@ EMAIL_CHANGE EMAIL_CHANGE
     String id "🗝️"
     String name 
     String name_kana 
+    String image_path 
     DateTime create_at 
     DateTime updated_at 
     }
