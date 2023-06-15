@@ -1,4 +1,4 @@
-name: CI
+name: Image Build and Push
 on:
   workflow_call:
     inputs:
