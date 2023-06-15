@@ -3,6 +3,7 @@ on: workflow_call
 
 jobs:
   Build:
+    if: github.event.pull_request.draft == false
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
@@ -37,6 +38,7 @@ jobs:
         run: yarn lint
 
   DB-Validate:
+    if: github.event.pull_request.draft == false
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:

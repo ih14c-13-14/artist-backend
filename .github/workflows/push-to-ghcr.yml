@@ -13,6 +13,7 @@ on:
 
 jobs:
   Build-And-Push:
+    if: github.event.pull_request.draft == false
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
