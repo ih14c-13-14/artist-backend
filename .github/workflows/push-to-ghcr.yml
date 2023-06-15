@@ -11,10 +11,6 @@ on:
         type: string
         required: true
 
-permissions:
-  contents: read
-  packages: write
-
 jobs:
   Build-And-Push:
     timeout-minutes: 60
