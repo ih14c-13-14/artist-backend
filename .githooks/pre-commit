@@ -7,8 +7,8 @@ if git diff --cached --name-only | grep -E 'credentials|\.env' | grep -v '.env.e
     exit 1
 fi
 
-# コミット対象がmainだった場合にブロックする
-if git branch --show-current | grep -E 'main'; then
+# コミット対象が"main"で完全一致した場合にブロックする
+if git branch --show-current | grep -E '^main$'; then
     echo "Error: You have committed to main branch."
     echo "Please commit to another branch and try again."
     exit 1
