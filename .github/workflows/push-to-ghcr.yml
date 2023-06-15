@@ -1,28 +1,24 @@
-name: publish to ghcr.io
+name: Image Build and Push
 on:
-  pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - ready_for_review
-    branches:
-      - main
-
-permissions:
-  contents: read
-  packages: write
+  workflow_call:
+    inputs:
+      ref:
+        description: 'commit or ref to deploy'
+        type: string
+        required: true
+      sha_short:
+        description: 'short sha of commit to deploy'
+        type: string
+        required: true
 
 jobs:
   Build-And-Push:
+    if: github.event.pull_request.draft == false
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Set outputs
-        id: vars
-        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT && echo "head_ref=$(echo ${GITHUB_HEAD_REF} | sed -e 's/\//-/g')" >> $GITHUB_OUTPUT
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v2.6.0
@@ -41,7 +37,7 @@ jobs:
           platforms: ${{ steps.buildx.outputs.platforms }}
           provenance: false
           tags: |
-            ghcr.io/${{ github.repository_owner }}/artist-backend:${{ steps.vars.outputs.sha_short }}
-            ghcr.io/${{ github.repository_owner }}/artist-backend:${{ steps.vars.outputs.head_ref }}
+            ghcr.io/${{ github.repository_owner }}/artist-backend:${{ inputs.sha_short }}
+            ghcr.io/${{ github.repository_owner }}/artist-backend:${{ inputs.ref }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
