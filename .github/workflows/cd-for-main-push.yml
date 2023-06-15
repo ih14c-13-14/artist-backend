@@ -1,0 +1,28 @@
+name: CD for main push
+on:
+  push:
+    branches:
+      - main
+      - master
+    paths-ignore:
+      - README.md
+jobs:
+  prepare:
+    timeout-minutes: 60
+    runs-on:
+      - ubuntu-latest
+    outputs:
+      sha_short: ${{ steps.vars.outputs.sha_short }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set outputs
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+  deploy:
+    uses: ./.github/workflows/push-to-ghcr.yml
+    needs:
+      - prepare
+    with:
+      sha_short: ${{ needs.prepare.outputs.sha_short }}
+      ref: main
+    secrets: inherit
