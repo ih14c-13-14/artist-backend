@@ -24,6 +24,9 @@ jobs:
       - ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Set outputs
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT && echo "head_ref=$(echo ${GITHUB_HEAD_REF} | sed -e 's/\//-/g')" >> $GITHUB_OUTPUT
   ci:
     uses: ./.github/workflows/ci.yml
     secrets: inherit
@@ -33,4 +36,7 @@ jobs:
     needs:
       - prepare
       - ci
+    with:
+      sha_short: ${{ needs.prepare.outputs.sha_short }}
+      ref: ${{ needs.prepare.outputs.head_ref }}
     secrets: inherit
