@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/base:dev-bullseye
+FROM mcr.microsoft.com/devcontainers/base:dev-bookworm
 
 SHELL ["/bin/bash", "-lc"]
 
