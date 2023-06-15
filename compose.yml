@@ -1,0 +1,55 @@
+services:
+  app:
+    build: .
+    restart: always
+    links:
+      - redis
+      - db
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    networks:
+      - internal_network
+      - external_network
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./.env
+
+  redis:
+    restart: always
+    image: redis:7.0.11-alpine
+    networks:
+      - internal_network
+    volumes:
+      - redis:/data
+    healthcheck:
+      test: "redis-cli ping"
+      interval: 5s
+      retries: 20
+
+  db:
+    restart: always
+    image: postgres:15.3-bullseye
+    networks:
+      - internal_network
+    env_file:
+      - ./.env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"
+      interval: 5s
+      retries: 20
+
+networks:
+  internal_network:
+    internal: true
+  external_network:
+
+
+volumes:
+  postgres:
+  redis:
