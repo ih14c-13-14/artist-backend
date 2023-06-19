@@ -18,7 +18,7 @@ datasource db {
 model users {
   id            String       @id @db.Char(33)
   email         String       @unique @db.VarChar(255)
-  password      String       @db.VarChar(255) /// TODO: #10|ハッシュ化されたパスワードの桁数の調査
+  password      String       @db.Char(60)
   age_group     Int          @db.SmallInt
   gender        Int          @db.SmallInt
   created_at    DateTime     @default(now()) @db.Timestamp(6)
