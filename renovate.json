@@ -4,12 +4,27 @@
 		"config:base",
 		"group:allNonMajor",
 		"group:definitelyTyped",
-		"group:nodeJs"
+		"group:nodeJs",
+		":timezone(Asia/Tokyo)",
+		":prHourlyLimitNone"
 	],
+	"schedule": ["after 9am", "before 12am"],
+	"labels": ["renovate"],
+	"rangeStrategy": "bump",
+	"postUpdateOptions": ["yarnDedupeHighest"],
 	"packageRules": [
 		{
 			"matchUpdateTypes": ["major"],
 			"addLabels": ["major update"]
+		},
+		{
+			"groupName": "nodejs",
+			"matchPackageNames": ["nodejs/node", "node", "nodejs", "@types/node"]
+		},
+		{
+			"matchUpdateTypes": ["minor", "patch"],
+			"matchCurrentVersion": "!/^0/",
+			"automerge": false
 		}
 	]
 }
