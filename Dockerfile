@@ -1,6 +1,6 @@
 # syntax = docker/dockerfile:1.4
 
-ARG NODE_VERSION=18.16.0-bookworm
+ARG NODE_VERSION=20.3.0-bookworm
 
 FROM --platform=$BUILDPLATFORM node:${NODE_VERSION} AS builder
 
