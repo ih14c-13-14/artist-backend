@@ -10,17 +10,6 @@
     "@jridgewell/gen-mapping" "^0.3.0"
     "@jridgewell/trace-mapping" "^0.3.9"
 
-"@angular-devkit/core@16.0.1":
-  version "16.0.1"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-16.0.1.tgz#1af4177d503d8d1babdf29c95d8901660a557243"
-  integrity sha512-2uz98IqkKJlgnHbWQ7VeL4pb+snGAZXIama2KXi+k9GsRntdcw+udX8rL3G9SdUGUF+m6+147Y1oRBMHsO/v4w==
-  dependencies:
-    ajv "8.12.0"
-    ajv-formats "2.1.1"
-    jsonc-parser "3.2.0"
-    rxjs "7.8.1"
-    source-map "0.7.4"
-
 "@angular-devkit/core@16.1.0":
   version "16.1.0"
   resolved "https://registry.yarnpkg.com/@angular-devkit/core/-/core-16.1.0.tgz#cb56b19e88fc936fb0b26c5ae62591f1e8906961"
@@ -43,17 +32,6 @@
     inquirer "8.2.4"
     symbol-observable "4.0.0"
     yargs-parser "21.1.1"
-
-"@angular-devkit/schematics@16.0.1":
-  version "16.0.1"
-  resolved "https://registry.yarnpkg.com/@angular-devkit/schematics/-/schematics-16.0.1.tgz#d49387e9e41c9cce98b155da51b0e193333dd178"
-  integrity sha512-A9D0LTYmiqiBa90GKcSuWb7hUouGIbm/AHbJbjL85WLLRbQA2PwKl7P5Mpd6nS/ZC0kfG4VQY3VOaDvb3qpI9g==
-  dependencies:
-    "@angular-devkit/core" "16.0.1"
-    jsonc-parser "3.2.0"
-    magic-string "0.30.0"
-    ora "5.4.1"
-    rxjs "7.8.1"
 
 "@angular-devkit/schematics@16.1.0":
   version "16.1.0"
@@ -758,19 +736,19 @@
     webpack "5.87.0"
     webpack-node-externals "3.0.0"
 
-"@nestjs/common@^9.4.3":
-  version "9.4.3"
-  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-9.4.3.tgz#f907c5315b4273f7675864a05c4dda7056632b87"
-  integrity sha512-Gd6D4IaYj01o14Bwv81ukidn4w3bPHCblMUq+SmUmWLyosK+XQmInCS09SbDDZyL8jy86PngtBLTdhJ2bXSUig==
+"@nestjs/common@^10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-10.0.2.tgz#8ecafc0c88d51579581f09898474d2431988d5aa"
+  integrity sha512-pws0Xtlt6olOleJiMH1/QxKYjV4eZbNMBvVrBraCmKMnrLG2HcVPlANuyPWOB18sz5s8u5/qCKJxuuP9uNIRqQ==
   dependencies:
     uid "2.0.2"
     iterare "1.2.1"
     tslib "2.5.3"
 
-"@nestjs/core@^9.4.3":
-  version "9.4.3"
-  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-9.4.3.tgz#7d6d3417e18c0a598684b87c955e4caac4f56dd4"
-  integrity sha512-Qi63+wi55Jh4sDyaj5Hhx2jOpKqT386aeo+VOKsxnd+Ql9VvkO/FjmuwBGUyzkJt29ENYc+P0Sx/k5LtstNpPQ==
+"@nestjs/core@^10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@nestjs/core/-/core-10.0.2.tgz#1aed727297417cfd03d6642c2d5e7b58ff57e780"
+  integrity sha512-Z84z7xJ5n6Noffl8brT7Z2tuW6pP46zWJk8NECSyon5iGQti+QemkE7lkx/MiCTe9oCB0L/S30UR8A2bAbOfDg==
   dependencies:
     uid "2.0.2"
     "@nuxtjs/opencollective" "0.3.2"
@@ -779,10 +757,10 @@
     path-to-regexp "3.2.0"
     tslib "2.5.3"
 
-"@nestjs/platform-express@^9.4.3":
-  version "9.4.3"
-  resolved "https://registry.yarnpkg.com/@nestjs/platform-express/-/platform-express-9.4.3.tgz#f61b75686bdfce566be3b54fa7bb20a4d87ed619"
-  integrity sha512-FpdczWoRSC0zz2dNL9u2AQLXKXRVtq4HgHklAhbL59X0uy+mcxhlSThG7DHzDMkoSnuuHY8ojDVf7mDxk+GtCw==
+"@nestjs/platform-express@^10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@nestjs/platform-express/-/platform-express-10.0.2.tgz#5d813c4d469f55ebdf053f9953f064f55b534f8d"
+  integrity sha512-VfPkstVqdeLkIrc/U1vyAO2OebV+myPgxv4vgxdvSSf6rSOWwqmTaWA6zHjZA5CYCmNf5cTGVXugCwz8cvn5KA==
   dependencies:
     body-parser "1.20.2"
     cors "2.8.5"
@@ -801,20 +779,10 @@
     jsonc-parser "3.2.0"
     pluralize "8.0.0"
 
-"@nestjs/schematics@^9.2.0":
-  version "9.2.0"
-  resolved "https://registry.yarnpkg.com/@nestjs/schematics/-/schematics-9.2.0.tgz#f840054b5ae4b0b4e70aa9f72c09c3cf388f2512"
-  integrity sha512-wHpNJDPzM6XtZUOB3gW0J6mkFCSJilzCM3XrHI1o0C8vZmFE1snbmkIXNyoi1eV0Nxh1BMymcgz5vIMJgQtTqw==
-  dependencies:
-    "@angular-devkit/core" "16.0.1"
-    "@angular-devkit/schematics" "16.0.1"
-    jsonc-parser "3.2.0"
-    pluralize "8.0.0"
-
-"@nestjs/testing@^9.4.3":
-  version "9.4.3"
-  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-9.4.3.tgz#53ffbabdd38f500b145c30f2fbb76dedad393d79"
-  integrity sha512-LDT8Ai2eKnTzvnPaJwWOK03qTaFap5uHHsJCv6dL0uKWk6hyF9jms8DjyVaGsaujCaXDG8izl1mDEER0OmxaZA==
+"@nestjs/testing@^10.0.2":
+  version "10.0.2"
+  resolved "https://registry.yarnpkg.com/@nestjs/testing/-/testing-10.0.2.tgz#7d38665c2e1e629d0f37bdfae2998aa68faf6669"
+  integrity sha512-Fjj5dGcAW0MSvZI3RzVhZtGU49ZOYysHyOx8spOXWeu2jDr4B+ChkAYJDuZSx9U0x/1ONp3RNZau6gWgG8UO9w==
   dependencies:
     tslib "2.5.3"
 
