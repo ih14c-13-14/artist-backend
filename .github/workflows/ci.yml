@@ -60,3 +60,5 @@ jobs:
         run: yarn prisma format && git diff --exit-code
       - name: DB Validate
         run: yarn prisma validate
+      - name: ERD check
+        run: yarn prisma generate && git diff --exit-code
