@@ -23,12 +23,6 @@ EMAIL_CHANGE EMAIL_CHANGE
     }
   
 
-  "areas" {
-    String code "🗝️"
-    String name 
-    }
-  
-
   "institutions" {
     String id "🗝️"
     String admission_fee_description 
@@ -62,11 +56,6 @@ EMAIL_CHANGE EMAIL_CHANGE
     }
   
 
-  "stamps" {
-
-    }
-  
-
   "arts_institutions" {
 
     }
@@ -88,19 +77,13 @@ EMAIL_CHANGE EMAIL_CHANGE
   
     "users" o|--|| "prefectures" : "prefecture"
     "users" o{--}o "arts_users" : "arts_users"
-    "users" o{--}o "stamps" : "stamps"
     "users" o{--}o "Token" : "Token"
     "prefectures" o{--}o "users" : "users"
-    "areas" o{--}o "arts" : "arts"
     "institutions" o{--}o "arts_institutions" : "arts_institutions"
-    "arts" o|--|| "areas" : "area"
     "arts" o{--}o "arts_institutions" : "arts_institutions"
     "arts" o{--}o "arts_users" : "arts_users"
-    "arts" o{--}o "stamps" : "stamps"
     "arts" o|--|| "authors" : "authors"
     "authors" o{--}o "arts" : "arts"
-    "stamps" o|--|| "users" : "user"
-    "stamps" o|--|| "arts" : "art"
     "arts_institutions" o|--|| "arts" : "art"
     "arts_institutions" o|--|| "institutions" : "institution"
     "arts_users" o|--|| "arts" : "art"
