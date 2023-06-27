@@ -16,34 +16,34 @@ datasource db {
 }
 
 model users {
-  id            String       @id @db.Char(33)
+  id            String       @id @db.Char(36)
   email         String       @unique @db.VarChar(255)
   password      String       @db.Char(60)
   age_group     Int          @db.SmallInt
   gender        Int          @db.SmallInt
   created_at    DateTime     @default(now()) @db.Timestamp(6)
   updated_at    DateTime     @updatedAt @db.Timestamp(6)
-  prefecture_id String       @db.Char(33)
+  prefecture_id String       @db.Char(36)
   prefecture    prefectures  @relation(fields: [prefecture_id], references: [id])
   arts_users    arts_users[]
   Token         Token[]
 }
 
 model prefectures {
-  id    String  @id @db.Char(33)
+  id    String  @id @db.Char(36)
   name  String  @unique @db.VarChar(4)
   users users[]
 }
 
 model institutions {
-  id                        String              @id @db.Char(33)
+  id                        String              @id @db.Char(36)
   admission_fee_description String              @db.Text
   updated_at                DateTime            @updatedAt @db.Timestamp(6)
   arts_institutions         arts_institutions[]
 }
 
 model arts {
-  id                     String              @id @db.Char(33)
+  id                     String              @id @db.Char(36)
   is_public              Boolean             @default(true)
   name                   String              @db.VarChar(255)
   name_kana              String              @db.VarChar(255)
@@ -55,14 +55,14 @@ model arts {
   address                String              @db.VarChar(255)
   created_at             DateTime            @default(now()) @db.Timestamp(6)
   updated_at             DateTime            @updatedAt @db.Timestamp(6)
-  author_id              String              @db.Char(33)
+  author_id              String              @db.Char(36)
   arts_institutions      arts_institutions[]
   arts_users             arts_users[]
   authors                authors             @relation(fields: [author_id], references: [id])
 }
 
 model authors {
-  id         String   @id @db.Char(33)
+  id         String   @id @db.Char(36)
   name       String   @db.VarChar(255)
   name_kana  String   @db.VarChar(255)
   image_path String   @db.VarChar(255)
@@ -72,8 +72,8 @@ model authors {
 }
 
 model arts_institutions {
-  art_id         String       @db.Char(33)
-  institution_id String       @db.Char(33)
+  art_id         String       @db.Char(36)
+  institution_id String       @db.Char(36)
   art            arts         @relation(fields: [art_id], references: [id])
   institution    institutions @relation(fields: [institution_id], references: [id])
 
@@ -81,8 +81,8 @@ model arts_institutions {
 }
 
 model arts_users {
-  art_id  String @db.Char(33)
-  user_id String @db.Char(33)
+  art_id  String @db.Char(36)
+  user_id String @db.Char(36)
   art     arts   @relation(fields: [art_id], references: [id])
   user    users  @relation(fields: [user_id], references: [id])
 
@@ -97,7 +97,7 @@ model Token {
   updated_at DateTime  @updatedAt
   expired_at DateTime
   users      users     @relation(fields: [usersId], references: [id])
-  usersId    String    @db.Char(33)
+  usersId    String    @db.Char(36)
 }
 
 enum TokenType {
