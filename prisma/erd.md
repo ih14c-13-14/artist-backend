@@ -66,18 +66,18 @@ EMAIL_CHANGE EMAIL_CHANGE
     }
   
 
-  "Token" {
+  "token" {
     Int id "🗝️"
     String token 
     TokenType type 
-    DateTime created_at 
+    DateTime create_at 
     DateTime updated_at 
     DateTime expired_at 
     }
   
     "users" o|--|| "prefectures" : "prefecture"
     "users" o{--}o "arts_users" : "arts_users"
-    "users" o{--}o "Token" : "Token"
+    "users" o{--}o "token" : "token"
     "prefectures" o{--}o "users" : "users"
     "institutions" o{--}o "arts_institutions" : "arts_institutions"
     "arts" o{--}o "arts_institutions" : "arts_institutions"
@@ -88,6 +88,6 @@ EMAIL_CHANGE EMAIL_CHANGE
     "arts_institutions" o|--|| "institutions" : "institution"
     "arts_users" o|--|| "arts" : "art"
     "arts_users" o|--|| "users" : "user"
-    "Token" o|--|| "TokenType" : "enum:type"
-    "Token" o|--|| "users" : "users"
+    "token" o|--|| "TokenType" : "enum:type"
+    "token" o|--|| "users" : "user"
 ```
