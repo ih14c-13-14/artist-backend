@@ -6,7 +6,7 @@ erDiagram
 EMAIL_CHANGE EMAIL_CHANGE
         }
     
-  "users" {
+  "Users" {
     String id "🗝️"
     String email 
     String password 
@@ -17,20 +17,20 @@ EMAIL_CHANGE EMAIL_CHANGE
     }
   
 
-  "prefectures" {
+  "Prefectures" {
     String id "🗝️"
     String name 
     }
   
 
-  "institutions" {
+  "Institutions" {
     String id "🗝️"
     String admission_fee_description 
     DateTime updated_at 
     }
   
 
-  "arts" {
+  "Arts" {
     String id "🗝️"
     Boolean is_public 
     String name 
@@ -46,7 +46,7 @@ EMAIL_CHANGE EMAIL_CHANGE
     }
   
 
-  "authors" {
+  "Authors" {
     String id "🗝️"
     String name 
     String name_kana 
@@ -56,17 +56,17 @@ EMAIL_CHANGE EMAIL_CHANGE
     }
   
 
-  "arts_institutions" {
+  "Arts_Institutions" {
 
     }
   
 
-  "arts_users" {
+  "Arts_Users" {
 
     }
   
 
-  "token" {
+  "Token" {
     Int id "🗝️"
     String token 
     TokenType type 
@@ -75,19 +75,19 @@ EMAIL_CHANGE EMAIL_CHANGE
     DateTime expired_at 
     }
   
-    "users" o|--|| "prefectures" : "prefecture"
-    "users" o{--}o "arts_users" : "arts_users"
-    "users" o{--}o "token" : "token"
-    "prefectures" o{--}o "users" : "users"
-    "institutions" o{--}o "arts_institutions" : "arts_institutions"
-    "arts" o{--}o "arts_institutions" : "arts_institutions"
-    "arts" o{--}o "arts_users" : "arts_users"
-    "arts" o|--|| "authors" : "authors"
-    "authors" o{--}o "arts" : "arts"
-    "arts_institutions" o|--|| "arts" : "art"
-    "arts_institutions" o|--|| "institutions" : "institution"
-    "arts_users" o|--|| "arts" : "art"
-    "arts_users" o|--|| "users" : "user"
-    "token" o|--|| "TokenType" : "enum:type"
-    "token" o|--|| "users" : "user"
+    "Users" o|--|| "Prefectures" : "prefecture"
+    "Users" o{--}o "Arts_Users" : "arts_users"
+    "Users" o{--}o "Token" : "token"
+    "Prefectures" o{--}o "Users" : "users"
+    "Institutions" o{--}o "Arts_Institutions" : "arts_institutions"
+    "Arts" o{--}o "Arts_Institutions" : "arts_institutions"
+    "Arts" o{--}o "Arts_Users" : "arts_users"
+    "Arts" o|--|| "Authors" : "authors"
+    "Authors" o{--}o "Arts" : "arts"
+    "Arts_Institutions" o|--|| "Arts" : "art"
+    "Arts_Institutions" o|--|| "Institutions" : "institution"
+    "Arts_Users" o|--|| "Arts" : "art"
+    "Arts_Users" o|--|| "Users" : "user"
+    "Token" o|--|| "TokenType" : "enum:type"
+    "Token" o|--|| "Users" : "user"
 ```
