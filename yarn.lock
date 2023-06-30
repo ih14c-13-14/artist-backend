@@ -680,6 +680,11 @@
     "@jridgewell/resolve-uri" "3.1.0"
     "@jridgewell/sourcemap-codec" "1.4.14"
 
+"@kripod/uuidv7@^0.3.4":
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/@kripod/uuidv7/-/uuidv7-0.3.4.tgz#504f94b17f58f860e0dfb1e45cea465cb2300009"
+  integrity sha512-i+CBqPsPehhAlDt2KYRR4+Yhj6LvnuBQQwNfNHwYkROjztaOmnDXPRvWl5zDy9ReVdRDhNeC4f2qRjjOLx1fsg==
+
 "@lukeed/csprng@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@lukeed/csprng/-/csprng-1.1.0.tgz#1e3e4bd05c1cc7a0b2ddbd8a03f39f6e4b5e6cfe"

@@ -51,7 +51,7 @@ EMAIL_CHANGE EMAIL_CHANGE
     String name 
     String name_kana 
     String image_path 
-    DateTime create_at 
+    DateTime created_at 
     DateTime updated_at 
     }
   
@@ -70,7 +70,7 @@ EMAIL_CHANGE EMAIL_CHANGE
     Int id "🗝️"
     String token 
     TokenType type 
-    DateTime create_at 
+    DateTime created_at 
     DateTime updated_at 
     DateTime expired_at 
     }
