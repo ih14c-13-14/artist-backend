@@ -28,6 +28,7 @@
 		"yarn": ">= 1.22.19"
 	},
 	"dependencies": {
+		"@kripod/uuidv7": "^0.3.4",
 		"@nestjs/common": "^10.0.3",
 		"@nestjs/core": "^10.0.3",
 		"@nestjs/platform-express": "^10.0.3",
