@@ -34,6 +34,14 @@ FROM --platform=$TARGETPLATFORM node:${NODE_VERSION}-slim AS runner
 ARG UID="991"
 ARG GID="991"
 
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+	--mount=type=cache,target=/var/lib/apt,sharing=locked \
+	rm -f /etc/apt/apt.conf.d/docker-clean \
+	; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache \
+	&& apt-get update \
+	&& apt-get install -yqq --no-install-recommends \
+	openssl
+
 RUN corepack enable \
 	&& groupadd -g "${GID}" artist \
 	&& useradd -l -u "${UID}" -g "${GID}" -m -d /artist artist \
