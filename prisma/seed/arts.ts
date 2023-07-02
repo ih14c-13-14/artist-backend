@@ -2,35 +2,26 @@ import { PrismaClient } from '@prisma/client';
 import { uuidv7 } from '@kripod/uuidv7';
 const prisma = new PrismaClient();
 
-import {
-	author1Id,
-	author2Id,
-	author3Id,
-	author4Id,
-	author5Id,
-	author6Id,
-	author7Id,
-	author8Id,
-	author9Id,
-	author10Id,
-} from './author';
+import { AUTHOR_IDS } from './author';
 
-export const art1Id = uuidv7();
-export const art2Id = uuidv7();
-export const art3Id = uuidv7();
-export const art4Id = uuidv7();
-export const art5Id = uuidv7();
-export const art6Id = uuidv7();
-export const art7Id = uuidv7();
-export const art8Id = uuidv7();
-export const art9Id = uuidv7();
-export const art10Id = uuidv7();
+export const ARTS_IDS = {
+	art1Id: uuidv7(),
+	art2Id: uuidv7(),
+	art3Id: uuidv7(),
+	art4Id: uuidv7(),
+	art5Id: uuidv7(),
+	art6Id: uuidv7(),
+	art7Id: uuidv7(),
+	art8Id: uuidv7(),
+	art9Id: uuidv7(),
+	art10Id: uuidv7(),
+} as const;
 
 export const art = async () => {
 	await prisma.arts.createMany({
 		data: [
 			{
-				id: art1Id,
+				id: ARTS_IDS.art1Id,
 				is_public: true,
 				name: 'アーティストの図書館',
 				name_kana: 'あーてぃすとのとしょかん',
@@ -43,10 +34,10 @@ export const art = async () => {
 					'祝日を除く火水定休（定休日も野外作品は鑑賞可）',
 				address: '新潟県上越市本城町7-7',
 				created_at: new Date(),
-				author_id: author1Id,
+				author_id: AUTHOR_IDS.author1Id,
 			},
 			{
-				id: art2Id,
+				id: ARTS_IDS.art2Id,
 				is_public: true,
 				name: '赤クランブ',
 				name_kana: 'あかくらんぶ',
@@ -59,10 +50,10 @@ export const art = async () => {
 					'祝日を除く火水定休（定休日も野外作品は鑑賞可）',
 				address: '新潟県上越市下門前446-2',
 				created_at: new Date(),
-				author_id: author2Id,
+				author_id: AUTHOR_IDS.author2Id,
 			},
 			{
-				id: art3Id,
+				id: ARTS_IDS.art3Id,
 				is_public: true,
 				name: 'イナゴナビタンゴ',
 				name_kana: 'いなごなびたんご',
@@ -75,10 +66,10 @@ export const art = async () => {
 					'祝日を除く火水定休（定休日も野外作品は鑑賞可）',
 				address: '新潟県上越市春日山町1丁目2-8',
 				created_at: new Date(),
-				author_id: author3Id,
+				author_id: AUTHOR_IDS.author3Id,
 			},
 			{
-				id: art4Id,
+				id: ARTS_IDS.art4Id,
 				is_public: true,
 				name: 'うぶすなの家',
 				name_kana: 'うぶすなのいえ',
@@ -91,10 +82,10 @@ export const art = async () => {
 					'祝日を除く火水定休（定休日も野外作品は鑑賞可）',
 				address: '新潟県上越市清里区青柳3436-2',
 				created_at: new Date(),
-				author_id: author4Id,
+				author_id: AUTHOR_IDS.author4Id,
 			},
 			{
-				id: art5Id,
+				id: ARTS_IDS.art5Id,
 				is_public: true,
 				name: 'エラリエル',
 				name_kana: 'えらりえる',
@@ -107,10 +98,10 @@ export const art = async () => {
 					'祝日を除く火水定休（定休日も野外作品は鑑賞可）',
 				address: ' 新潟県上越市本城町7-1',
 				created_at: new Date(),
-				author_id: author5Id,
+				author_id: AUTHOR_IDS.author5Id,
 			},
 			{
-				id: art6Id,
+				id: ARTS_IDS.art6Id,
 				is_public: true,
 				name: 'オモイノハナシ',
 				name_kana: 'おもいのはなし',
@@ -123,10 +114,10 @@ export const art = async () => {
 					'祝日を除く火水定休（定休日も野外作品は鑑賞可）',
 				address: '新潟県上越市下池部1317-1',
 				created_at: new Date(),
-				author_id: author6Id,
+				author_id: AUTHOR_IDS.author6Id,
 			},
 			{
-				id: art7Id,
+				id: ARTS_IDS.art7Id,
 				is_public: true,
 				name: '黄金の魚',
 				name_kana: 'おうごんのさかな',
@@ -139,10 +130,10 @@ export const art = async () => {
 					'祝日を除く火水定休（定休日も野外作品は鑑賞可）',
 				address: '新潟県上越市本城町7-1',
 				created_at: new Date(),
-				author_id: author7Id,
+				author_id: AUTHOR_IDS.author7Id,
 			},
 			{
-				id: art8Id,
+				id: ARTS_IDS.art8Id,
 				is_public: true,
 				name: '上卿の館',
 				name_kana: 'じょうきょうのやかた',
@@ -155,10 +146,10 @@ export const art = async () => {
 					'祝日を除く火水定休（定休日も野外作品は鑑賞可）',
 				address: '新潟県上越市頸城区鵜ノ木148番地',
 				created_at: new Date(),
-				author_id: author8Id,
+				author_id: AUTHOR_IDS.author8Id,
 			},
 			{
-				id: art9Id,
+				id: ARTS_IDS.art9Id,
 				is_public: true,
 				name: 'まつだい雪国文化センター',
 				name_kana: 'まつだいゆきぐにぶんかセンター',
@@ -171,10 +162,10 @@ export const art = async () => {
 					'祝日を除く火水定休（定休日も野外作品は鑑賞可）',
 				address: '新潟県上越市中央4丁目16-10',
 				created_at: new Date(),
-				author_id: author9Id,
+				author_id: AUTHOR_IDS.author9Id,
 			},
 			{
-				id: art10Id,
+				id: ARTS_IDS.art10Id,
 				is_public: true,
 				name: 'ミュージアム・オブ・スノー',
 				name_kana: 'みゅーじあむおぶすのー',
@@ -187,7 +178,7 @@ export const art = async () => {
 					'祝日を除く火水定休（定休日も野外作品は鑑賞可）',
 				address: ' 新潟県上越市大潟区四ツ屋浜580番地1',
 				created_at: new Date(),
-				author_id: author10Id,
+				author_id: AUTHOR_IDS.author10Id,
 			},
 		],
 	});
