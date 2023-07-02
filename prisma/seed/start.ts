@@ -2,22 +2,22 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 import { prefecture } from './prefecture';
 import { author } from './author';
-import { art } from './arts';
+import { art } from './art';
 import { institution } from './institution';
-import { art_institution } from './art_institution';
+import { artInstitution } from './artInstitution';
 
 async function main() {
-	await prisma.prefectures.deleteMany();
-	await prisma.authors.deleteMany();
+	await prisma.artsInstitutions.deleteMany();
 	await prisma.arts.deleteMany();
+	await prisma.authors.deleteMany();
 	await prisma.institutions.deleteMany();
-	await prisma.arts_Institutions.deleteMany();
+	await prisma.prefectures.deleteMany();
 
 	await prefecture();
 	await author();
 	await art();
 	await institution();
-	await art_institution();
+	await artInstitution();
 }
 
 main()
