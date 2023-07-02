@@ -5,7 +5,7 @@ SHELL ["/bin/bash", "-lc"]
 RUN apt-get update -q && \
 		export DEBIAN_FRONTEND=noninteractive && \
     apt-get install -y --no-install-recommends \ 
-		curl ca-certificates git && \
+		curl ca-certificates openssl git && \
 	apt-get autoremove -y && \
 	apt-get clean -y && \
 	rm -rf /var/lib/apt/lists/* \
@@ -25,3 +25,8 @@ RUN /bin/bash -lc "\
     asdf plugin-add yarn && \
     asdf plugin-add awscli && \
     asdf plugin-add python"
+
+COPY --link .tool-versions /home/vscode/.tool-versions
+RUN /bin/bash -lc "\
+    source $HOME/.asdf/asdf.sh && \
+		asdf install"
