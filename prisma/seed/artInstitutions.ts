@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 import { ART_IDS } from './data/arts';
 import { INSTITUTION_IDS } from './data/institutions';
 
-export const artInstitution = async () => {
+export const insertArtInstitution = async () => {
 	if (ART_IDS.length !== INSTITUTION_IDS.length)
 		throw new Error('IDの数が合いません');
 	const artsInstitutionsData = ART_IDS.map((artId, index) => ({

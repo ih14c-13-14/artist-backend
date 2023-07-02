@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { uuidv7 } from '@kripod/uuidv7';
 const prisma = new PrismaClient();
 
-export const prefecture = async () => {
+export const insertPrefectures = async () => {
 	await prisma.prefectures.createMany({
 		data: [
 			{ id: uuidv7(), name: '北海道' },
