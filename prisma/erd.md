@@ -56,12 +56,12 @@ EMAIL_CHANGE EMAIL_CHANGE
     }
   
 
-  "Arts_Institutions" {
+  "ArtsInstitutions" {
 
     }
   
 
-  "Arts_Users" {
+  "ArtsUsers" {
 
     }
   
@@ -76,18 +76,18 @@ EMAIL_CHANGE EMAIL_CHANGE
     }
   
     "Users" o|--|| "Prefectures" : "prefecture"
-    "Users" o{--}o "Arts_Users" : "arts_users"
+    "Users" o{--}o "ArtsUsers" : "arts_users"
     "Users" o{--}o "Token" : "token"
     "Prefectures" o{--}o "Users" : "users"
-    "Institutions" o{--}o "Arts_Institutions" : "arts_institutions"
-    "Arts" o{--}o "Arts_Institutions" : "arts_institutions"
-    "Arts" o{--}o "Arts_Users" : "arts_users"
+    "Institutions" o{--}o "ArtsInstitutions" : "arts_institutions"
+    "Arts" o{--}o "ArtsInstitutions" : "arts_institutions"
+    "Arts" o{--}o "ArtsUsers" : "arts_users"
     "Arts" o|--|| "Authors" : "authors"
     "Authors" o{--}o "Arts" : "arts"
-    "Arts_Institutions" o|--|| "Arts" : "art"
-    "Arts_Institutions" o|--|| "Institutions" : "institution"
-    "Arts_Users" o|--|| "Arts" : "art"
-    "Arts_Users" o|--|| "Users" : "user"
+    "ArtsInstitutions" o|--|| "Arts" : "art"
+    "ArtsInstitutions" o|--|| "Institutions" : "institution"
+    "ArtsUsers" o|--|| "Arts" : "art"
+    "ArtsUsers" o|--|| "Users" : "user"
     "Token" o|--|| "TokenType" : "enum:type"
     "Token" o|--|| "Users" : "user"
 ```

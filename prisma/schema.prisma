@@ -16,16 +16,16 @@ datasource db {
 }
 
 model Users {
-  id            String       @id @db.Char(36)
-  email         String       @unique @db.VarChar(255)
-  password      String       @db.Char(60)
-  age_group     Int          @db.SmallInt
-  gender        Int          @db.SmallInt
-  created_at    DateTime     @default(now()) @db.Timestamp(6)
-  updated_at    DateTime     @updatedAt @db.Timestamp(6)
-  prefecture_id String       @db.Char(36)
-  prefecture    Prefectures  @relation(fields: [prefecture_id], references: [id])
-  arts_users    Arts_Users[]
+  id            String      @id @db.Char(36)
+  email         String      @unique @db.VarChar(255)
+  password      String      @db.Char(60)
+  age_group     Int         @db.SmallInt
+  gender        Int         @db.SmallInt
+  created_at    DateTime    @default(now()) @db.Timestamp(6)
+  updated_at    DateTime    @updatedAt @db.Timestamp(6)
+  prefecture_id String      @db.Char(36)
+  prefecture    Prefectures @relation(fields: [prefecture_id], references: [id])
+  arts_users    ArtsUsers[]
   token         Token[]
 }
 
@@ -36,29 +36,29 @@ model Prefectures {
 }
 
 model Institutions {
-  id                        String              @id @db.Char(36)
-  admission_fee_description String              @db.Text
-  updated_at                DateTime            @updatedAt @db.Timestamp(6)
-  arts_institutions         Arts_Institutions[]
+  id                        String             @id @db.Char(36)
+  admission_fee_description String             @db.Text
+  updated_at                DateTime           @updatedAt @db.Timestamp(6)
+  arts_institutions         ArtsInstitutions[]
 }
 
 model Arts {
-  id                     String              @id @db.Char(36)
-  is_public              Boolean             @default(true)
-  name                   String              @db.VarChar(255)
-  name_kana              String              @db.VarChar(255)
-  created_year           Int                 @db.Integer
-  description            String              @db.Text
-  image_path             String[]            @db.Text
-  datetime_description   String              @db.Text
-  closed_day_description String              @db.Text
-  address                String              @db.VarChar(255)
-  created_at             DateTime            @default(now()) @db.Timestamp(6)
-  updated_at             DateTime            @updatedAt @db.Timestamp(6)
-  author_id              String              @db.Char(36)
-  arts_institutions      Arts_Institutions[]
-  arts_users             Arts_Users[]
-  authors                Authors             @relation(fields: [author_id], references: [id])
+  id                     String             @id @db.Char(36)
+  is_public              Boolean            @default(true)
+  name                   String             @db.VarChar(255)
+  name_kana              String             @db.VarChar(255)
+  created_year           Int                @db.Integer
+  description            String             @db.Text
+  image_path             String[]           @db.Text
+  datetime_description   String             @db.Text
+  closed_day_description String             @db.Text
+  address                String             @db.VarChar(255)
+  created_at             DateTime           @default(now()) @db.Timestamp(6)
+  updated_at             DateTime           @updatedAt @db.Timestamp(6)
+  author_id              String             @db.Char(36)
+  arts_institutions      ArtsInstitutions[]
+  arts_users             ArtsUsers[]
+  authors                Authors            @relation(fields: [author_id], references: [id])
 }
 
 model Authors {
@@ -71,7 +71,7 @@ model Authors {
   arts       Arts[]
 }
 
-model Arts_Institutions {
+model ArtsInstitutions {
   art_id         String       @db.Char(36)
   institution_id String       @db.Char(36)
   art            Arts         @relation(fields: [art_id], references: [id])
@@ -80,7 +80,7 @@ model Arts_Institutions {
   @@id([art_id, institution_id])
 }
 
-model Arts_Users {
+model ArtsUsers {
   art_id  String @db.Char(36)
   user_id String @db.Char(36)
   art     Arts   @relation(fields: [art_id], references: [id])
