@@ -2,8 +2,8 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-import { ART_IDS } from './data/art';
-import { INSTITUTION_IDS } from './data/institution';
+import { ART_IDS } from './data/arts';
+import { INSTITUTION_IDS } from './data/institutions';
 
 export const artInstitution = async () => {
 	if (ART_IDS.length !== INSTITUTION_IDS.length)

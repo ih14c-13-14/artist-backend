@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { INSTITUTION_COMMON_DATA, INSTITUTION_IDS } from './data/institution';
+import { INSTITUTION_COMMON_DATA, INSTITUTION_IDS } from './data/institutions';
 
 const prisma = new PrismaClient();
 
