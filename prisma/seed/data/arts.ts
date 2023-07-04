@@ -147,7 +147,6 @@ export const ART_COMMON_DATA = (() => {
 	];
 })() satisfies Array<Omit<Arts, 'id' | 'author_id'>>;
 
-// UUIDv7の配列
-export const ART_IDS: ReadonlyArray<string> = Array(ART_COMMON_DATA.length).map(
-	() => uuidv7(),
-);
+export const ART_IDS: ReadonlyArray<string> = Array(ART_COMMON_DATA.length)
+	.fill('')
+	.map(() => uuidv7());
