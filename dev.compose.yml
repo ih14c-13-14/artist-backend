@@ -1,0 +1,82 @@
+services:
+  app:
+    container_name: dev_app
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: always
+    links:
+      - redis
+      - db
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+    networks:
+      - internal_network
+      - external_network
+    ports:
+      - "3000:3000"
+      - "5555:5555"
+    env_file:
+      - ./.env
+    volumes:
+      - .:/app
+
+  redis:
+    container_name: dev_redis
+    restart: always
+    image: redis:7.0.11-alpine
+    networks:
+      - internal_network
+    volumes:
+      - redis:/data
+    healthcheck:
+      test: "redis-cli ping"
+      interval: 5s
+      retries: 20
+
+  db:
+    container_name: dev_db
+    restart: always
+    image: postgres:15.3-bookworm
+    networks:
+      - internal_network
+    env_file:
+      - ./.env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"
+      interval: 5s
+      retries: 20
+
+  localstack:
+    container_name: dev_localstack
+    image: localstack/localstack:2.1.0
+    ports:
+      - "127.0.0.1:4566:4566" # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559" # external services port range
+    environment:
+      - DEBUG=${DEBUG-}
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      - "localstack:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - internal_network
+    healthcheck:
+      test: 'curl -s http://localhost:4566/_localstack/health | grep -q ''^{"services":'''
+
+networks:
+  internal_network:
+    internal: true
+  external_network:
+
+volumes:
+  postgres:
+  redis:
+  localstack:

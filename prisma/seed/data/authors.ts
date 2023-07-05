@@ -66,7 +66,8 @@ export const AUTHOR_COMMON_DATA = (() => {
 	] as const;
 })();
 
-// UUIDv7の配列
 export const AUTHOR_IDS: ReadonlyArray<string> = Array(
 	AUTHOR_COMMON_DATA.length,
-).map(() => uuidv7());
+)
+	.fill('')
+	.map(() => uuidv7());
