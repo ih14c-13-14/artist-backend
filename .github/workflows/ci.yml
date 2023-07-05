@@ -7,8 +7,17 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
+      - name: Generate github token
+        id: generate_token
+        uses: tibdex/github-app-token@v1.8.0 # リリース時にコミットハッシュで固定
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Setup asdf
         uses: asdf-vm/actions/setup@v2
         # 2回目以降エラーが出るが問題なし
@@ -24,8 +33,17 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
+      - name: Generate github token
+        id: generate_token
+        uses: tibdex/github-app-token@v1.8.0 # リリース時にコミットハッシュで固定
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Setup asdf
         uses: asdf-vm/actions/setup@v2
         # 2回目以降エラーが出るが問題なし
@@ -42,8 +60,17 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
+      - name: Generate github token
+        id: generate_token
+        uses: tibdex/github-app-token@v1.8.0 # リリース時にコミットハッシュで固定
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Setup asdf
         uses: asdf-vm/actions/setup@v2
         # 2回目以降エラーが出るが問題なし
