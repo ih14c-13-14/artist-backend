@@ -4,10 +4,10 @@ import { ArtServiceResponse } from './dto/art-service-response';
 
 @Injectable()
 export class ArtsService {
-	constructor(private readonly prisma: PrismaService) {}
+	constructor(private readonly prismaService: PrismaService) {}
 
 	async findAll(): Promise<ArtServiceResponse[]> {
-		return await this.prisma.arts.findMany({
+		return await this.prismaService.arts.findMany({
 			select: {
 				id: true,
 				name: true,
