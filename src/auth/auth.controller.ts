@@ -13,10 +13,6 @@ import { SignUpInput } from './dto/signup.input';
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
-	@Get()
-	getHello(): string {
-		return 'Hello World!';
-	}
 
 	@Post('signup')
 	async signUp(@Body() signUpInput: SignUpInput): Promise<Users> {
