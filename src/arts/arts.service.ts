@@ -21,4 +21,25 @@ export class ArtsService {
 			},
 		});
 	}
+
+	async getAscByAuthor(): Promise<ArtServiceResponse[]> {
+		return await this.prismaService.arts.findMany({
+			select: {
+				id: true,
+				name: true,
+				address: true,
+				image_path: true,
+				authors: {
+					select: {
+						name: true,
+					},
+				},
+			},
+			orderBy: {
+				authors: {
+					name_kana: 'asc',
+				},
+			},
+		});
+	}
 }
