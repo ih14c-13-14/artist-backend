@@ -6,7 +6,7 @@ import { ArtServiceResponse } from './dto/art-service-response';
 export class ArtsService {
 	constructor(private readonly prismaService: PrismaService) {}
 
-	async findAll(): Promise<ArtServiceResponse[]> {
+	async getAll(): Promise<ArtServiceResponse[]> {
 		return await this.prismaService.arts.findMany({
 			select: {
 				id: true,

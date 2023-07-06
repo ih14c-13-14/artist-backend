@@ -6,9 +6,13 @@ import { paths } from '@/generated/schema';
 export class ArtsController {
 	constructor(private readonly artsService: ArtsService) {}
 
+	/**
+	 * 作品全て取得処理
+	 * @throws paths['/api/v1/arts']['get']['responses']['200']
+	 */
 	@Get()
-	async findAll(): Promise<ArtDTO[]> {
-		const arts = await this.artsService.findAll();
+	async getAll(): Promise<ArtDTO[]> {
+		const arts = await this.artsService.getAll();
 		const result: ArtDTO[] = arts.map((art) => ({
 			'arts.id': art.id,
 			'arts.name': art.name,
@@ -16,7 +20,7 @@ export class ArtsController {
 			'arts.image_path': art.image_path,
 			'authors.name': art.authors.name,
 		}));
-		return result;
+		return result satisfies paths['/api/v1/arts']['get']['responses']['200']['content']['application/json'];
 	}
 
 	/**
