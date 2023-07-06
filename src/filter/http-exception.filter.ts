@@ -1,14 +1,9 @@
 import {
 	ArgumentsHost,
-	BadRequestException,
 	Catch,
 	ExceptionFilter,
-	ForbiddenException,
 	HttpException,
 	HttpStatus,
-	InternalServerErrorException,
-	NotFoundException,
-	UnauthorizedException,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { components } from '@/generated/schema';
@@ -63,16 +58,6 @@ export class HttpExceptionFilter implements ExceptionFilter {
 			response.status(status).json(errorResponse);
 		};
 
-		if (exception instanceof BadRequestException) {
-			handleException(exception);
-		} else if (exception instanceof UnauthorizedException) {
-			handleException(exception);
-		} else if (exception instanceof ForbiddenException) {
-			handleException(exception);
-		} else if (exception instanceof NotFoundException) {
-			handleException(exception);
-		} else if (exception instanceof InternalServerErrorException) {
-			handleException(exception);
-		}
+		handleException(exception);
 	}
 }
