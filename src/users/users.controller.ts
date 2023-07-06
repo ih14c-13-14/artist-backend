@@ -13,7 +13,6 @@ export class UsersController {
 	) {}
 
 	// email認証処理
-	@HttpCode(200)
 	@Post('password-reset')
 	async getUserEmail(@Body() updateUsersInput: UpdateUsersInput) {
 		//userServiceのgetUserEmail(入力されたemmail)を呼び出す
