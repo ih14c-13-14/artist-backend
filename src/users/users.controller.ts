@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Param, Put, HttpCode } from '@nestjs/common';
+import { Body, Controller, Post, Param, Put } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { Users } from '@prisma/client';
