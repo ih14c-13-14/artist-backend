@@ -7,7 +7,6 @@ import {
 	HttpCode,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Users } from '@prisma/client';
 import { SignUpInput } from './dto/signup.input';
 import { paths } from '@/generated/schema';
 
@@ -52,7 +51,7 @@ export class AuthController {
 			);
 		// TODO: JWTを返す
 		return {
-			message: '会員登録が完了しました',
+			access_token: '会員登録が完了しました',
 		} satisfies paths['/api/v1/auth/signup']['post']['responses']['200']['content']['application/json'];
 	}
 }

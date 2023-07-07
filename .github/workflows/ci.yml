@@ -26,6 +26,8 @@ jobs:
         uses: asdf-vm/actions/install@v2
       - name: Install dependencies
         run: yarn install --immutable
+      - name: type-check
+        run: yarn tsc --noEmit
       - name: Build
         run: yarn build
 
@@ -52,7 +54,9 @@ jobs:
         uses: asdf-vm/actions/install@v2
       - name: Install dependencies
         run: yarn install --immutable
-      - name: Lint
+      - name: fmt
+        run: yarn fmt
+      - name: lint
         run: yarn lint
 
   DB-Validate:
