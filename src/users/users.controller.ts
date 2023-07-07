@@ -2,10 +2,9 @@ import {
 	Body,
 	Controller,
 	Post,
-	HttpException,
-	HttpStatus,
 	Param,
 	Put,
+	HttpCode,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { PrismaService } from '@/prisma/prisma.service';
@@ -20,12 +19,9 @@ export class UsersController {
 	) {}
 
 	// email認証処理
+	@HttpCode(200)
 	@Post('password-reset')
 	async getUserEmail(@Body('email') email: string) {
-		if (email === undefined) {
-			// throw new HttpException({ message: 'できた' }, HttpStatus.BAD_REQUEST);
-			throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
-		}
 		//userServiceのgetUserEmail(入力されたemmail)を呼び出す
 		return (await this.usersService.getUserEmail(
 			email,
