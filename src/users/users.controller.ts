@@ -1,15 +1,9 @@
-import {
-	Body,
-	Controller,
-	Post,
-	Param,
-	Put,
-	HttpCode,
-} from '@nestjs/common';
+import { Body, Controller, Post, Param, Put, HttpCode } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { Users } from '@prisma/client';
 import { paths } from '@/generated/schema';
+import { UpdateUsersInput } from './dto/update-users.input';
 
 @Controller('users')
 export class UsersController {
@@ -21,10 +15,10 @@ export class UsersController {
 	// email認証処理
 	@HttpCode(200)
 	@Post('password-reset')
-	async getUserEmail(@Body('email') email: string) {
+	async getUserEmail(@Body() updateUsersInput: UpdateUsersInput) {
 		//userServiceのgetUserEmail(入力されたemmail)を呼び出す
 		return (await this.usersService.getUserEmail(
-			email,
+			updateUsersInput,
 		)) satisfies paths['/api/v1/users/password-reset']['post']['responses']['200']['content']['application/json'];
 	}
 
