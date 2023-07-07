@@ -52,7 +52,9 @@ jobs:
         uses: asdf-vm/actions/install@v2
       - name: Install dependencies
         run: yarn install --immutable
-      - name: Lint
+      - name: fmt
+        run: yarn fmt
+      - name: lint
         run: yarn lint
 
   DB-Validate:
