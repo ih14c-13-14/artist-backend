@@ -4,36 +4,55 @@ import {
 	HttpException,
 	HttpStatus,
 	Post,
+	HttpCode,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Users } from '@prisma/client';
 import { SignUpInput } from './dto/signup.input';
+import { paths } from '@/generated/schema';
 
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
+	@HttpCode(200)
 	@Post('signup')
-	async signUp(@Body() signUpInput: SignUpInput): Promise<Users> {
+	async signUp(@Body() signUpInput: SignUpInput): Promise<object> {
 		const user = await this.authService.getUser(signUpInput.email);
+		/**
+		 * emailがすでに登録されている場合の処理
+		 * @throws {paths["/api/v1/auth/signup"]["post"]["responses"]["400"]}
+		 */
 		if (user)
 			throw new HttpException(
 				{
-					message: 'このメールアドレスはすでに登録されています',
-				},
-				HttpStatus.CONFLICT,
+					type: 'validation',
+					message: [
+						{
+							property: 'email',
+							message: 'このメールアドレスはすでに登録されています',
+						},
+					],
+				} satisfies paths['/api/v1/auth/signup']['post']['responses']['400']['content']['application/json'],
+				HttpStatus.BAD_REQUEST,
 			);
 
 		const newUser = await this.authService.signUp(signUpInput);
 
+		/**
+		 * ユーザー登録に失敗した場合の処理
+		 * @throws {paths["/api/v1/auth/signup"]["post"]["responses"]["500"]}
+		 */
 		if (!newUser)
 			throw new HttpException(
 				{
-					message: 'ユーザー登録に失敗しました',
-				},
-				HttpStatus.BAD_REQUEST,
+					message: '会員登録に失敗しました',
+				} satisfies paths['/api/v1/auth/signup']['post']['responses']['500']['content']['application/json'],
+				HttpStatus.INTERNAL_SERVER_ERROR,
 			);
-
-		return newUser;
+		// TODO: JWTを返す
+		return {
+			message: '会員登録が完了しました',
+		} satisfies paths['/api/v1/auth/signup']['post']['responses']['200']['content']['application/json'];
 	}
 }
