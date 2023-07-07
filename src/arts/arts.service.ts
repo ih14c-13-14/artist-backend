@@ -6,7 +6,7 @@ import { ArtServiceResponse } from './dto/art-service-response';
 export class ArtsService {
 	constructor(private readonly prismaService: PrismaService) {}
 
-	async findAll(): Promise<ArtServiceResponse[]> {
+	async getAll(): Promise<ArtServiceResponse[]> {
 		return await this.prismaService.arts.findMany({
 			select: {
 				id: true,
@@ -17,6 +17,27 @@ export class ArtsService {
 					select: {
 						name: true,
 					},
+				},
+			},
+		});
+	}
+
+	async getAscByAuthor(): Promise<ArtServiceResponse[]> {
+		return await this.prismaService.arts.findMany({
+			select: {
+				id: true,
+				name: true,
+				address: true,
+				image_path: true,
+				authors: {
+					select: {
+						name: true,
+					},
+				},
+			},
+			orderBy: {
+				authors: {
+					name_kana: 'asc',
 				},
 			},
 		});
