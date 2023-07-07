@@ -49,9 +49,11 @@ export class AuthController {
 				} satisfies paths['/api/v1/auth/signup']['post']['responses']['500']['content']['application/json'],
 				HttpStatus.INTERNAL_SERVER_ERROR,
 			);
-		// TODO: JWTを返す
+		// TODO: JWTを返す。一旦文字列で#106で対応
 		return {
 			access_token: '会員登録が完了しました',
 		} satisfies paths['/api/v1/auth/signup']['post']['responses']['200']['content']['application/json'];
 	}
+
+
 }
