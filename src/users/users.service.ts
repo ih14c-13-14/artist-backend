@@ -2,16 +2,18 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Users } from '@prisma/client';
 import { isNil } from 'lodash';
+import { UpdateUsersInput } from './dto/update-users.input';
 
 @Injectable()
 export class UsersService {
 	constructor(private readonly prismaService: PrismaService) {}
 
 	// email認証
-	async getUserEmail(email: string) {
+	async getUserEmail(email: UpdateUsersInput) {
+		const { email: userEmail } = email;
 		const get_email = await this.prismaService.users.findUnique({
 			where: {
-				email: email,
+				email: userEmail,
 			},
 			select: {
 				id: true,
