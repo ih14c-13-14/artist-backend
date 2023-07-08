@@ -6,36 +6,36 @@ import { UpdateUsersInput } from './dto/update-users.input';
 
 @Injectable()
 export class UsersService {
-	constructor(private readonly prismaService: PrismaService) {}
+    constructor(private readonly prismaService: PrismaService) {}
 
-	// email認証
-	async getUserEmail(email: UpdateUsersInput) {
-		const { email: userEmail } = email;
-		const get_email = await this.prismaService.users.findUnique({
-			where: {
-				email: userEmail,
-			},
-			select: {
-				id: true,
-				email: true,
-			},
-		});
+    // email認証
+    async getUserEmail(email: UpdateUsersInput) {
+        const { email: userEmail } = email;
+        const get_email = await this.prismaService.users.findUnique({
+            where: {
+                email: userEmail,
+            },
+            select: {
+                id: true,
+                email: true,
+            },
+        });
 
-		if (isNil(get_email?.email)) {
-			throw new HttpException({ message: 'Not Found.' }, HttpStatus.NOT_FOUND);
-		}
+        if (isNil(get_email?.email)) {
+            throw new HttpException({ message: 'Not Found.' }, HttpStatus.NOT_FOUND);
+        }
 
-		return {
-			message: '成功',
-		} as const;
-	}
+        return {
+            message: '成功',
+        } as const;
+    }
 
-	// パスワード変更
-	async passwordChange(id: string, NewPassword: string): Promise<Users> {
-		const changePassword = await this.prismaService.users.update({
-			where: { id: id },
-			data: { password: NewPassword },
-		});
-		return changePassword;
-	}
+    // パスワード変更
+    async passwordChange(id: string, NewPassword: string): Promise<Users> {
+        const changePassword = await this.prismaService.users.update({
+            where: { id: id },
+            data: { password: NewPassword },
+        });
+        return changePassword;
+    }
 }
