@@ -65,6 +65,10 @@ export class AuthController {
 
 		const user = await this.authService.validateUser(email, password);
 
+		/**
+		 * emailまたはpasswordが間違っている場合の処理
+		 * @throws {paths["/api/v1/auth/signin"]["post"]["responses"]["401"]}
+		 */
 		if (!user) {
 			throw new HttpException(
 				{
