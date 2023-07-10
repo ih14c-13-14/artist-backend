@@ -20,20 +20,20 @@ async function bootstrap() {
 			},
 			stopAtFirstError: true,
 		}),
-		new ParseUUIDPipe({
-			exceptionFactory: (errors) => {
-				return new BadRequestException({
-					type: 'validation',
-					message: [
-						{
-							property: 'uuid',
-							message: errors,
-						},
-					],
-				});
-			},
-		}),
 	);
+	new ParseUUIDPipe({
+		exceptionFactory: (errors) => {
+			return new BadRequestException({
+				type: 'validation',
+				message: [
+					{
+						property: 'uuid',
+						message: errors,
+					},
+				],
+			});
+		},
+	});
 	app.useGlobalFilters(new HttpExceptionFilter());
 
 	await app.listen(3000);
