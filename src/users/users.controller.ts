@@ -39,8 +39,8 @@ export class UsersController {
 			new ParseUUIDPipe(),
 		)
 		id: string,
-		@Body() NewPassword: PasswordChange,
+		@Body() newPassword: PasswordChange,
 	): Promise<Users> {
-		return this.usersService.passwordChange(id, NewPassword);
+		return this.usersService.passwordChange(id, newPassword);
 	}
 }

@@ -40,13 +40,13 @@ export class UsersService {
 	// パスワード変更
 	async passwordChange(
 		id: string,
-		NewPassword: PasswordChange,
+		newPassword: PasswordChange,
 	): Promise<Users> {
 		const salt = await bcrypt.genSalt();
-		const HashPassword = await bcrypt.hash(NewPassword.password, salt);
+		const hashPassword = await bcrypt.hash(newPassword.password, salt);
 		const changePassword = await this.prismaService.users.update({
 			where: { id: id },
-			data: { password: HashPassword },
+			data: { password: hashPassword },
 		});
 		return changePassword;
 	}
