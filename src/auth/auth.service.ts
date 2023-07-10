@@ -9,6 +9,7 @@ import { SignUpInput } from './dto/signup.input';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './types/jwtPayload';
 import { PasswordOmitUsers } from './types/passwordOmitUsers';
+import { TOKENS } from '@/config';
 
 @Injectable()
 export class AuthService {
@@ -78,8 +79,12 @@ export class AuthService {
 	}
 
 	async signIn(user: PasswordOmitUsers): Promise<string> {
-		const payload: JwtPayload = { email: user.email, sub: user.id };
-		const accessToken = await this.jwtService.sign(payload);
+		const payload: JwtPayload = {
+			email: user.email,
+			sub: user.id,
+			exp: Number(TOKENS.ACCESS_EXPIRES_IN),
+		};
+		const accessToken = await this.jwtService.signAsync(payload);
 		return accessToken;
 	}
 }
