@@ -56,6 +56,11 @@ export class AuthController {
 		} satisfies paths['/api/v1/auth/signup']['post']['responses']['200']['content']['application/json'];
 	}
 
+	/**
+	 * ログイン処理
+	 * @param signInInput  ログイン情報
+	 * @returns {object}   JWTトークン
+	 */
 	@HttpCode(200)
 	@Post('signin')
 	async signIn(
@@ -78,10 +83,6 @@ export class AuthController {
 			);
 		}
 
-		/**
-		 * signIn成功：JWTトークンを返す
-		 * @throws {paths["/api/v1/auth/signin"]["post"]["responses"]["200"]}
-		 * */
 		const accessToken = await this.authService.signIn(user);
 
 		return {
