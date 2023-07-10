@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { ArtServiceResponse } from './dto/art-service-response';
 import { artDetailServiceResponse } from './dto/art-detail-service-response';
+import { ArtsUsers } from '@prisma/client';
 
 @Injectable()
 export class ArtsService {
@@ -76,5 +77,47 @@ export class ArtsService {
 				id: art_id,
 			},
 		});
+	}
+
+	async createArtWithUserId(
+		art_id: string,
+		user_id: string,
+	): Promise<ArtsUsers> {
+		const data = await this.prismaService.artsUsers.create({
+			data: {
+				art_id,
+				user_id,
+			},
+		});
+		return data;
+	}
+
+	async isArtIdExists(art_id: string): Promise<boolean> {
+		let isArt = false;
+		const art = await this.prismaService.arts.findUnique({
+			where: {
+				id: art_id,
+			},
+		});
+		if (art) isArt = !isArt;
+		return isArt;
+	}
+
+	async isFavoriteArtWithUserIdExists(
+		art_id: string,
+		user_id: string,
+	): Promise<boolean> {
+		let isFavorite = true;
+		const favoriteArt = await this.prismaService.artsUsers.findUnique({
+			where: {
+				art_id_user_id: {
+					art_id,
+					user_id,
+				},
+			},
+		});
+
+		if (!favoriteArt) isFavorite = !isFavorite;
+		return isFavorite;
 	}
 }

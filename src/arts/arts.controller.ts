@@ -1,14 +1,20 @@
 import {
 	BadRequestException,
+	Body,
 	Controller,
 	Get,
+	HttpCode,
+	InternalServerErrorException,
+	NotFoundException,
 	Param,
 	ParseUUIDPipe,
+	Post,
 } from '@nestjs/common';
+import { paths } from '@/generated/schema';
 import { ArtsService } from './arts.service';
 import { ArtDTO } from './dto/art-dto';
-import { paths } from '@/generated/schema';
 import { ArtDetailDTO } from './dto/art-detail';
+import { UserIdDTO } from './dto/user-id.dto';
 @Controller('arts')
 export class ArtsController {
 	constructor(private readonly artsService: ArtsService) {}
@@ -89,5 +95,69 @@ export class ArtsController {
 		} as const;
 
 		return result satisfies paths['/api/v1/arts/{art_id}']['get']['responses']['200']['content']['application/json'];
+	}
+
+	/**
+	 * お気に入り成功
+	 * @throws paths['/api/v1/arts/{art_id}/favorite']['post']['responses']['200']
+	 */
+	@HttpCode(200)
+	@Post(':art_id/favorite')
+	// TODO: Guard追加
+	// TODO: ユーザのTOKENが正しいか, ユーザとJWTトークンが一致しているか。
+	async favoriteArt(
+		/**
+		 * parametersで`art_id`取得
+		 * paths['/api/v1/arts/{art_id}']['get']['parameters']['path']['art_id']
+		 */
+		@Param(
+			'art_id' satisfies paths['/api/v1/arts/{art_id}/favorite']['post']['parameters']['path']['art_id'],
+			new ParseUUIDPipe(),
+		)
+		art_id: string,
+		@Body() userIdDTO: UserIdDTO,
+	): Promise<{ message: string }> {
+		const { user_id } = userIdDTO;
+
+		/**
+		 * 作品が存在しない時。
+		 * @throws paths['/api/v1/arts/{art_id}/favorite']['post']['responses']['404']
+		 */
+		const isArt = await this.artsService.isArtIdExists(art_id);
+		if (!isArt) {
+			throw new NotFoundException() satisfies paths['/api/v1/arts/{art_id}/favorite']['post']['responses']['404']['content']['application/json'];
+		}
+
+		/**
+		 * 作品がすでにお気に入りされている場合
+		 * @throws paths['/api/v1/arts/{art_id}/favorite']['post']['responses']['400']
+		 */
+		const isFavorite = await this.artsService.isFavoriteArtWithUserIdExists(
+			art_id,
+			user_id,
+		);
+		if (isFavorite) {
+			throw new BadRequestException({
+				type: 'validation',
+				message: [
+					{
+						property: 'art_id',
+						message: '作品がすでにお気に入りされています。',
+					},
+				],
+			} satisfies paths['/api/v1/arts/{art_id}/favorite']['post']['responses']['400']['content']['application/json']);
+		}
+
+		/**
+		 * お気に入り登録に失敗した時
+		 * @throws paths['/api/v1/arts/{art_id}/favorite']['post']['responses']['500']
+		 */
+		const data = await this.artsService.createArtWithUserId(art_id, user_id);
+		if (!data) {
+			throw new InternalServerErrorException() satisfies paths['/api/v1/arts/{art_id}/favorite']['post']['responses']['500']['content']['application/json'];
+		}
+		return {
+			message: 'success',
+		} satisfies paths['/api/v1/arts/{art_id}/favorite']['post']['responses']['200']['content']['application/json'];
 	}
 }
