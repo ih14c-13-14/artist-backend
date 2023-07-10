@@ -27,9 +27,10 @@ export class UsersService {
 		if (isNil(get_email?.email)) {
 			throw new HttpException(
 				{
-					message: 'Not Found.'
+					message: 'Not Found.',
 				} satisfies paths['/api/v1/users/password-reset']['post']['responses']['404']['content']['application/json'],
-				 HttpStatus.NOT_FOUND);
+				HttpStatus.NOT_FOUND,
+			);
 		}
 
 		return {
