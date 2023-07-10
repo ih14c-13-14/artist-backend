@@ -6,10 +6,17 @@ import { uuidv7 } from '@kripod/uuidv7';
 import { convertAgeGroupToNumber } from '@/auth/utils/convertAge';
 import { convertGenderToNumber } from '@/auth/utils/convertGender';
 import { SignUpInput } from './dto/signup.input';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './types/jwtPayload';
+import { PasswordOmitUsers } from './types/passwordOmitUsers';
+import { TOKENS } from '@/config';
 
 @Injectable()
 export class AuthService {
-	constructor(private readonly prismaService: PrismaService) {}
+	constructor(
+		private readonly prismaService: PrismaService,
+		private jwtService: JwtService,
+	) {}
 
 	async signUp(signUpInput: SignUpInput): Promise<Users> {
 		const { email, password, age_group, gender, prefecture } = signUpInput;
@@ -41,7 +48,43 @@ export class AuthService {
 
 	async getUser(email: string): Promise<Users> {
 		return await this.prismaService.users.findUnique({
-			where: { email },
+			where: {
+				email,
+			},
 		});
+	}
+
+	async verifyPassword(
+		plainTextPassword: string,
+		hashedPassword: string,
+	): Promise<boolean> {
+		const isPasswordMatching = await bcrypt.compare(
+			plainTextPassword,
+			hashedPassword,
+		);
+		return isPasswordMatching;
+	}
+
+	async validateUser(
+		email: string,
+		password: string,
+	): Promise<PasswordOmitUsers | null> {
+		const user = await this.getUser(email);
+
+		if (user && (await this.verifyPassword(password, user.password))) {
+			const { password: _password, ...result } = user;
+			return result;
+		}
+		return null;
+	}
+
+	async signIn(user: PasswordOmitUsers): Promise<string> {
+		const payload: JwtPayload = {
+			email: user.email,
+			sub: user.id,
+			exp: Number(TOKENS.ACCESS_EXPIRES_IN),
+		};
+		const accessToken = await this.jwtService.signAsync(payload);
+		return accessToken;
 	}
 }

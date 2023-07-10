@@ -8,6 +8,7 @@ import {
 } from 'class-validator';
 
 export class SignUpInput {
+	// TODO: message考える
 	@IsEmail({})
 	@IsNotEmpty({
 		message: 'メールアドレスを入力してください',
