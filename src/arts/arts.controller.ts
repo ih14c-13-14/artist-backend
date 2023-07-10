@@ -99,7 +99,7 @@ export class ArtsController {
 
 	/**
 	 * お気に入り成功
-	 * @throws paths['/api/v1/arts/{art_id}/favorite']['post']['responses']['200']
+	 * @returns paths['/api/v1/arts/{art_id}/favorite']['post']['responses']['200']
 	 */
 	@HttpCode(200)
 	@Post(':art_id/favorite')
