@@ -9,6 +9,7 @@ import {
 import { AuthService } from './auth.service';
 import { SignUpInput } from './dto/signup.input';
 import { paths } from '@/generated/schema';
+import { SignInInput } from './dto/signin.input';
 
 @Controller('auth')
 export class AuthController {
@@ -55,5 +56,32 @@ export class AuthController {
 		} satisfies paths['/api/v1/auth/signup']['post']['responses']['200']['content']['application/json'];
 	}
 
+	@HttpCode(200)
+	@Post('signin')
+	async signIn(
+		@Body() signInInput: SignInInput,
+	): Promise<{ access_token: string }> {
+		const { email, password } = signInInput;
 
+		const user = await this.authService.validateUser(email, password);
+
+		if (!user) {
+			throw new HttpException(
+				{
+					message: 'メールアドレスまたはパスワードが間違っています',
+				} satisfies paths['/api/v1/auth/signin']['post']['responses']['401']['content']['application/json'],
+				HttpStatus.UNAUTHORIZED,
+			);
+		}
+
+		/**
+		 * signIn成功：JWTトークンを返す
+		 * @throws {paths["/api/v1/auth/signin"]["post"]["responses"]["200"]}
+		 * */
+		const accessToken = await this.authService.signIn(user);
+
+		return {
+			access_token: accessToken,
+		} satisfies paths['/api/v1/auth/signin']['post']['responses']['200']['content']['application/json'];
+	}
 }
