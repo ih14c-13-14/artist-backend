@@ -12,7 +12,7 @@ import { PrismaService } from '@/prisma/prisma.service';
 import { Users } from '@prisma/client';
 import { paths } from '@/generated/schema';
 import { EmailValidation } from './dto/email-validation';
-import { PasswordChange } from './dto/password-chenge';
+import { PasswordChange } from './dto/password-change';
 
 @Controller('users')
 export class UsersController {

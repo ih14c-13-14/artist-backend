@@ -3,7 +3,9 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Users } from '@prisma/client';
 import { isNil } from 'lodash';
 import { EmailValidation } from './dto/email-validation';
-import { PasswordChange } from './dto/password-chenge';
+import { PasswordChange } from './dto/password-change';
+import { paths } from '@/generated/schema';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -23,7 +25,11 @@ export class UsersService {
 		});
 
 		if (isNil(get_email?.email)) {
-			throw new HttpException({ message: 'Not Found.' }, HttpStatus.NOT_FOUND);
+			throw new HttpException(
+				{
+					message: 'Not Found.'
+				} satisfies paths['/api/v1/users/password-reset']['post']['responses']['404']['content']['application/json'],
+				 HttpStatus.NOT_FOUND);
 		}
 
 		return {
@@ -36,9 +42,11 @@ export class UsersService {
 		id: string,
 		NewPassword: PasswordChange,
 	): Promise<Users> {
+		const salt = await bcrypt.genSalt();
+		const HashPassword = await bcrypt.hash(NewPassword.password, salt);
 		const changePassword = await this.prismaService.users.update({
 			where: { id: id },
-			data: { password: NewPassword.password },
+			data: { password: HashPassword },
 		});
 		return changePassword;
 	}
