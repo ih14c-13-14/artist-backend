@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Param, Put, HttpCode } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Post,
+	Param,
+	Put,
+	HttpCode,
+	ParseUUIDPipe,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { Users } from '@prisma/client';
@@ -26,7 +34,11 @@ export class UsersController {
 	//パスワード変更処理
 	@Put(':user_id/password-change')
 	updateUserPassword(
-		@Param('user_id') id: string,
+		@Param(
+			'user_id' satisfies paths['/api/v1/users/{user_id}/password-change']['put']['parameters']['path']['user_id'],
+			new ParseUUIDPipe(),
+		)
+		id: string,
 		@Body() NewPassword: PasswordChange,
 	): Promise<Users> {
 		return this.usersService.passwordChange(id, NewPassword);
