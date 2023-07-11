@@ -92,6 +92,21 @@ export class ArtsService {
 		return data;
 	}
 
+	async deleteArtWithArtIdUserId(
+		art_id: string,
+		user_id: string,
+	): Promise<ArtsUsers> {
+		const data = await this.prismaService.artsUsers.delete({
+			where: {
+				art_id_user_id: {
+					art_id,
+					user_id,
+				},
+			},
+		});
+		return data;
+	}
+
 	async isArtIdExists(art_id: string): Promise<boolean> {
 		let isArt = false;
 		const art = await this.prismaService.arts.findUnique({
