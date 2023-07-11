@@ -23,14 +23,14 @@ model Users {
   gender        Int         @db.SmallInt
   created_at    DateTime    @default(now()) @db.Timestamp(6)
   updated_at    DateTime    @updatedAt @db.Timestamp(6)
-  prefecture_id String      @db.Char(36)
+  prefecture_id Int         @db.SmallInt
   prefecture    Prefectures @relation(fields: [prefecture_id], references: [id])
   arts_users    ArtsUsers[]
   token         Token[]
 }
 
 model Prefectures {
-  id    String  @id @db.Char(36)
+  id    Int     @id @default(autoincrement())
   name  String  @unique @db.VarChar(4)
   users Users[]
 }
