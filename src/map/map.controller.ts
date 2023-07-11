@@ -5,9 +5,7 @@ import { paths } from '@/generated/schema';
 
 @Controller('map')
 export class MapController {
-	constructor(
-		private readonly artsService: ArtsService,
-	) {}
+	constructor(private readonly artsService: ArtsService) {}
 
 	/**
 	 * マップに描画する住所を取得、art作品情報を取得するためのart_idを取得する処理
