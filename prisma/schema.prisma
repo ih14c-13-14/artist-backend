@@ -30,7 +30,7 @@ model Users {
 }
 
 model Prefectures {
-  id    Int     @id @default(autoincrement())
+  id    Int     @id @db.SmallInt
   name  String  @unique @db.VarChar(4)
   users Users[]
 }
