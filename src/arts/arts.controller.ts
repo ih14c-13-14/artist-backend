@@ -16,13 +16,17 @@ import { ArtsService } from './arts.service';
 import { ArtDTO } from './dto/art-dto';
 import { ArtDetailDTO } from './dto/art-detail';
 import { UserIdDTO } from './dto/user-id.dto';
+import { UsersService } from '@/users/users.service';
 @Controller('arts')
 export class ArtsController {
-	constructor(private readonly artsService: ArtsService) {}
+	constructor(
+		private readonly artsService: ArtsService,
+		private readonly usersService: UsersService,
+	) {}
 
 	/**
 	 * 作品全て取得処理
-	 * @throws paths['/api/v1/arts']['get']['responses']['200']
+	 * @returns paths['/api/v1/arts']['get']['responses']['200']
 	 */
 	@Get()
 	async getAll(): Promise<ArtDTO[]> {
@@ -56,7 +60,7 @@ export class ArtsController {
 
 	/**
 	 * 作品の詳細情報取得
-	 * @throws paths['/api/v1/arts/{art_id}']['get']['responses']['200']
+	 * @returns paths['/api/v1/arts/{art_id}']['get']['responses']['200']
 	 */
 	@Get(':art_id')
 	async getArtDetail(
@@ -198,5 +202,47 @@ export class ArtsController {
 		return {
 			message: 'deleted',
 		} satisfies paths['/api/v1/arts/{art_id}/favorite']['delete']['responses']['200']['content']['application/json'];
+	/*
+	 * お気に入りの作品を取得
+	 * @returns paths['/api/v1/arts/{user_id}/favorited']['get']['responses']['200']
+	 */
+	@Get(':user_id/favorited')
+	// TODO: Guard追加
+	// TODO: ユーザのTOKENが正しいか, ユーザとJWTトークンが一致しているか。
+	async getFavoriteByArtIdWithUserId(
+		@Param(
+			/**
+			 * parameterで`user_id`を取得
+			 * paths['/api/v1/arts/{user_id}/favorited']['get']['parameters']['path']['user_id']
+			 */
+			'user_id' satisfies paths['/api/v1/arts/{user_id}/favorited']['get']['parameters']['path']['user_id'],
+			new ParseUUIDPipe(),
+		)
+		user_id: string,
+	): Promise<ArtDTO[]> {
+		/**
+		 * ユーザが存在しない時
+		 * @throws paths['/api/v1/arts/{user_id}/favorited']['get']['responses']['404']
+		 */
+		const user = await this.usersService.getUserById(user_id);
+		if (!user) {
+			throw new NotFoundException() satisfies paths['/api/v1/arts/{user_id}/favorited']['get']['responses']['404']['content']['application/json'];
+		}
+
+		// 保存されているart_idを全て取得
+		const favoriteArtId = await this.artsService.getFavoriteArtIdByUserId(
+			user_id,
+		);
+		const artIds: string[] = favoriteArtId.map((item) => item.art_id);
+
+		const arts = await this.artsService.getFavoriteArtsByArtId(artIds);
+		const result: ArtDTO[] = arts.map((art) => ({
+			'arts.id': art.id,
+			'arts.name': art.name,
+			'arts.address': art.address,
+			'arts.image_path': art.image_path,
+			'authors.name': art.authors.name,
+		}));
+		return result satisfies paths['/api/v1/arts/{user_id}/favorited']['get']['responses']['200']['content']['application/json'];
 	}
 }
