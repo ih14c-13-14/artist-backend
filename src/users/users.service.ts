@@ -51,4 +51,11 @@ export class UsersService {
 		});
 		return changePassword;
 	}
+  
+  async getUserById(user_id: string): Promise<Users> {
+		return await this.prismaService.users.findUnique({
+			where: {
+				id: user_id,
+			},
+	});
 }

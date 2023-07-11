@@ -120,4 +120,40 @@ export class ArtsService {
 		if (!favoriteArt) isFavorite = !isFavorite;
 		return isFavorite;
 	}
+
+	async getFavoriteArtIdByUserId(
+		user_id: string,
+	): Promise<{ art_id: string }[]> {
+		return await this.prismaService.artsUsers.findMany({
+			select: {
+				art_id: true,
+			},
+			where: {
+				user_id,
+			},
+		});
+	}
+
+	async getFavoriteArtsByArtId(
+		artIds: string[],
+	): Promise<ArtServiceResponse[]> {
+		return await this.prismaService.arts.findMany({
+			select: {
+				id: true,
+				name: true,
+				address: true,
+				image_path: true,
+				authors: {
+					select: {
+						name: true,
+					},
+				},
+			},
+			where: {
+				id: {
+					in: artIds,
+				},
+			},
+		});
+	}
 }
