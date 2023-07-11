@@ -8,6 +8,9 @@ import { paths } from '@/generated/schema';
 import * as bcrypt from 'bcrypt';
 import { uuidv7 } from '@kripod/uuidv7';
 import { UserInfoResponse } from './dto/user-info-response';
+import { InformationChangeValidation } from './dto/informationChange-validation';
+import { convertAgeGroupToNumber } from '@/auth/utils/convertAge';
+import { convertGenderToNumber } from '@/auth/utils/convertGender';
 
 @Injectable()
 export class UsersService {
@@ -133,6 +136,32 @@ export class UsersService {
 			},
 			where: {
 				id: user_id,
+			},
+		});
+	}
+
+	//他情報変更処理
+	async informationChange(
+		id: string,
+		informationInput: InformationChangeValidation,
+	) {
+		const { age_group, gender, prefecture } = informationInput;
+
+		const selectedAgeGroup: number = convertAgeGroupToNumber(age_group);
+		const selectedGender: number = convertGenderToNumber(gender);
+
+		const prefectureId = await this.prismaService.prefectures.findFirst({
+			where: { name: prefecture },
+		});
+
+		if (!prefectureId) throw new Error('都道府県コードが見つかりません');
+
+		return await this.prismaService.users.update({
+			where: { id: id },
+			data: {
+				age_group: selectedAgeGroup,
+				gender: selectedGender,
+				prefecture: { connect: { id: prefectureId.id } },
 			},
 		});
 	}

@@ -17,6 +17,7 @@ import { PasswordChange } from './dto/password-change';
 import { convertNumberToAge } from '@/utils/convert-age';
 import { convertNumberToGender } from '@/utils/convert-gender';
 import { UserInfoDTO } from './dto/user-info';
+import { InformationChangeValidation } from './dto/informationChange-validation';
 
 @Controller('users')
 export class UsersController {
@@ -87,5 +88,18 @@ export class UsersController {
 		};
 
 		return result satisfies paths['/api/v1/users/{user_id}/info']['get']['responses']['200']['content']['application/json'];
+	}
+
+	//他情報変更処理
+	@Put(':user_id/others-change')
+	async informationChange(
+		@Param(
+			'user_id' satisfies paths['/api/v1/users/{user_id}/others-change']['put']['parameters']['path']['user_id'],
+			new ParseUUIDPipe(),
+		)
+		id: string,
+		@Body() informationInput: InformationChangeValidation,
+	) {
+		return await this.usersService.informationChange(id, informationInput);
 	}
 }
