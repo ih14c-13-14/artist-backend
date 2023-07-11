@@ -202,6 +202,7 @@ export class ArtsController {
 		return {
 			message: 'deleted',
 		} satisfies paths['/api/v1/arts/{art_id}/favorite']['delete']['responses']['200']['content']['application/json'];
+	}
 	/*
 	 * お気に入りの作品を取得
 	 * @returns paths['/api/v1/arts/{user_id}/favorited']['get']['responses']['200']
