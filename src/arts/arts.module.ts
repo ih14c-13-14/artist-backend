@@ -8,5 +8,6 @@ import { UsersService } from '@/users/users.service';
 	imports: [PrismaModule],
 	controllers: [ArtsController],
 	providers: [ArtsService, UsersService],
+	exports: [ArtsService],
 })
 export class ArtsModule {}
