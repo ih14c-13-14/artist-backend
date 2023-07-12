@@ -56,6 +56,7 @@ export class UsersController {
 		@Body() informationInput: InformationChangeValidation,
 	) {
 		return await this.usersService.informationChange(id, informationInput);
+	}
 
 	//新しいメールアドレスの受け取り
 	@HttpCode(200)
