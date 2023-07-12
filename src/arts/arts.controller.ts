@@ -198,7 +198,7 @@ export class ArtsController {
 			throw new NotFoundException() satisfies paths['/api/v1/arts/{art_id}/favorite']['delete']['responses']['404']['content']['application/json'];
 		}
 
-		this.artsService.deleteArtWithArtIdUserId(art_id, user_id);
+		await this.artsService.deleteArtWithArtIdUserId(art_id, user_id);
 		return {
 			message: 'deleted',
 		} satisfies paths['/api/v1/arts/{art_id}/favorite']['delete']['responses']['200']['content']['application/json'];
