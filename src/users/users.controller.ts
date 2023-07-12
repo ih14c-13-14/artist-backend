@@ -6,13 +6,17 @@ import {
 	Put,
 	HttpCode,
 	ParseUUIDPipe,
+	Get,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
 import { PrismaService } from '@/prisma/prisma.service';
 import { Users } from '@prisma/client';
 import { paths } from '@/generated/schema';
+import { UsersService } from './users.service';
 import { EmailValidation } from './dto/email-validation';
 import { PasswordChange } from './dto/password-change';
+import { convertNumberToAge } from '@/utils/convert-age';
+import { convertNumberToGender } from '@/utils/convert-gender';
+import { UserInfoDTO } from './dto/user-info';
 
 @Controller('users')
 export class UsersController {
@@ -25,7 +29,7 @@ export class UsersController {
 	@HttpCode(200)
 	@Post('password-reset')
 	async getUserEmail(@Body() updateUsersInput: EmailValidation) {
-		//userServiceのgetUserEmail(入力されたemmail)を呼び出す
+		//userServiceのgetUserEmail(入力されたemail)を呼び出す
 		return (await this.usersService.getUserEmail(
 			updateUsersInput,
 		)) satisfies paths['/api/v1/users/password-reset']['post']['responses']['200']['content']['application/json'];
@@ -56,5 +60,32 @@ export class UsersController {
 		@Body() newEmail: EmailValidation,
 	) {
 		return this.usersService.getNewEmail(id, newEmail);
+	}
+
+	/**
+	 * userの情報を取得する。
+	 * @returns paths['/api/v1/users/{user_id}/info']['get']['responses']['200']
+	 */
+	@Get(':user_id/info')
+	async getUserInfoByUserId(
+		@Param(
+			'user_id' satisfies paths['/api/v1/users/{user_id}/info']['get']['parameters']['path']['user_id'],
+			new ParseUUIDPipe(),
+		)
+		user_id: string,
+	): Promise<UserInfoDTO> {
+		const userInfo = await this.usersService.getUserInfoByUserId(user_id);
+		const { age_group, prefecture, gender, email } = userInfo;
+		const ageStr: string = convertNumberToAge(age_group);
+		const genderStr: string = convertNumberToGender(gender);
+
+		const result: UserInfoDTO = {
+			age_group: ageStr,
+			prefecture: prefecture.name,
+			gender: genderStr,
+			email: email,
+		};
+
+		return result satisfies paths['/api/v1/users/{user_id}/info']['get']['responses']['200']['content']['application/json'];
 	}
 }
