@@ -6,6 +6,7 @@ import { EmailValidation } from './dto/email-validation';
 import { PasswordChange } from './dto/password-change';
 import { paths } from '@/generated/schema';
 import * as bcrypt from 'bcrypt';
+import { uuidv7 } from '@kripod/uuidv7';
 
 @Injectable()
 export class UsersService {
@@ -58,5 +59,62 @@ export class UsersService {
 				id: user_id,
 			},
 		});
+	}
+
+	//新しいメールアドレスを受け取る
+	async getNewEmail(id: string, newEmail: EmailValidation) {
+		//emailがusersテーブルに存在しているか確認
+		const userId = await this.prismaService.users.findFirst({
+			where: { id: id },
+		});
+		if (!userId) {
+			throw new HttpException(
+				{
+					type: 'validateion',
+					message: [
+						{
+							property: 'user_id',
+							message: 'ユーザーidが存在しません',
+						},
+					],
+				} satisfies paths['/api/v1/users/{user_id}/email-change']['post']['responses']['400']['content']['application/json'],
+				HttpStatus.BAD_REQUEST,
+			);
+		}
+
+		const userEmail = await this.prismaService.users.findFirst({
+			where: { email: newEmail.email },
+		});
+		if (userEmail) {
+			throw new HttpException(
+				{
+					type: 'validateion',
+					message: [
+						{
+							property: 'email',
+							message: 'このメールアドレスはすでに登録されています',
+						},
+					],
+				} satisfies paths['/api/v1/users/{user_id}/email-change']['post']['responses']['400']['content']['application/json'],
+				HttpStatus.BAD_REQUEST,
+			);
+		}
+
+		const now = new Date();
+		const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
+
+		/**
+		 * トークンを生成し、1時間後のデータと共にデータベースに挿入します。
+		 */
+		await this.prismaService.token.create({
+			data: {
+				token: uuidv7(),
+				type: 'EMAIL_CHANGE',
+				expired_at: oneHourLater,
+				user_id: id,
+			},
+		});
+
+		//メール送信処理
 	}
 }
