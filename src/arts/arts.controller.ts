@@ -2,6 +2,7 @@ import {
 	BadRequestException,
 	Body,
 	Controller,
+	Delete,
 	Get,
 	HttpCode,
 	InternalServerErrorException,
@@ -165,6 +166,43 @@ export class ArtsController {
 		} satisfies paths['/api/v1/arts/{art_id}/favorite']['post']['responses']['200']['content']['application/json'];
 	}
 
+	/**
+	 * お気に入り作品の削除
+	 * @returns paths['/api/v1/arts/{art_id}/favorite']['delete']['responses']['200']
+	 */
+	@Delete(':art_id/favorite')
+	// TODO: Guard追加
+	// TODO: ユーザのTOKENが正しいか, ユーザとJWTトークンが一致しているか。
+	async deleteFavoriteByArtIdWithUserId(
+		/**
+		 * parametersで`art_id`取得
+		 * paths['/api/v1/arts/{art_id}/favorite']['delete']['parameters']['path']['art_id']
+		 */
+		@Param(
+			'art_id' satisfies paths['/api/v1/arts/{art_id}/favorite']['delete']['parameters']['path']['art_id'],
+			new ParseUUIDPipe(),
+		)
+		art_id: string,
+		@Body() userIdDTO: UserIdDTO,
+	) {
+		const { user_id } = userIdDTO;
+		/**
+		 * 作品がお気に入りされていない場合
+		 * @throws paths['/api/v1/arts/{art_id}/favorite']['delete']['responses']['404']
+		 */
+		const isFavorite = await this.artsService.isFavoriteArtWithUserIdExists(
+			art_id,
+			user_id,
+		);
+		if (!isFavorite) {
+			throw new NotFoundException() satisfies paths['/api/v1/arts/{art_id}/favorite']['delete']['responses']['404']['content']['application/json'];
+		}
+
+		await this.artsService.deleteArtWithArtIdUserId(art_id, user_id);
+		return {
+			message: 'deleted',
+		} satisfies paths['/api/v1/arts/{art_id}/favorite']['delete']['responses']['200']['content']['application/json'];
+	}
 	/*
 	 * お気に入りの作品を取得
 	 * @returns paths['/api/v1/arts/{user_id}/favorited']['get']['responses']['200']
