@@ -1,18 +1,21 @@
-export const genderMapping: Record<string, number> = {
-	男性: 1,
-	女性: 2,
-	その他: 9,
+export const genderMapping: Record<number, string> = {
+	1: '男性',
+	2: '女性',
+	9: 'その他',
 };
 
 const convertNumberToGender = (genderNum: number): string | undefined => {
-	const gender = Object.keys(genderMapping).find(
-		(key) => genderMapping[key] === genderNum,
-	);
+	const gender = genderMapping[genderNum];
 	return gender;
 };
 
-const convertGenderToNumber = (gender: string): number | undefined => {
-	return genderMapping[gender];
+const convertGenderToNumber = (genderStr: string): number | undefined => {
+	for (const key in genderMapping) {
+		if (genderMapping[key] === genderStr) {
+			return Number(key);
+		}
+	}
+	return undefined;
 };
 
 export { convertNumberToGender, convertGenderToNumber };

@@ -1,22 +1,27 @@
-export const ageMapping: Record<string, number> = {
-	'10代': 1,
-	'20代': 2,
-	'30代': 3,
-	'40代': 4,
-	'50代': 5,
-	'60代': 6,
-	'70代': 7,
-	'80代': 8,
-	'90代': 9,
+export const ageMapping: Record<number, string> = {
+	1: '10代',
+	2: '20代',
+	3: '30代',
+	4: '40代',
+	5: '50代',
+	6: '60代',
+	7: '70代',
+	8: '80代',
+	9: '90代',
 };
 
 const convertNumberToAge = (ageNum: number): string | undefined => {
-	const age = Object.keys(ageMapping).find((key) => ageMapping[key] === ageNum);
+	const age = ageMapping[ageNum];
 	return age;
 };
 
 const convertAgeToNumber = (ageStr: string): number | undefined => {
-	return ageMapping[ageStr];
+	for (const key in ageMapping) {
+		if (ageMapping[key] === ageStr) {
+			return Number(key);
+		}
+	}
+	return undefined;
 };
 
 export { convertAgeToNumber, convertNumberToAge };
