@@ -6,6 +6,7 @@ import { EmailValidation } from './dto/email-validation';
 import { PasswordChange } from './dto/password-change';
 import { paths } from '@/generated/schema';
 import * as bcrypt from 'bcrypt';
+import { uuidv7 } from '@kripod/uuidv7';
 
 @Injectable()
 export class UsersService {
@@ -58,5 +59,38 @@ export class UsersService {
 				id: user_id,
 			},
 		});
+	}
+
+	//新しいメールアドレスを受け取る
+	async getNewEmail(id: string, newEmail: EmailValidation) {
+		//emailがusersテーブルに存在しているか確認
+		const userId = await this.prismaService.users.findFirst({
+			where: { id: id },
+		});
+		const userEmail = await this.prismaService.users.findFirst({
+			where: { email: newEmail.email },
+		});
+
+		if (!userId) {
+			throw new Error('ユーザーが存在していません');
+		}
+		if (userEmail) {
+			throw new Error('他のユーザーがメールアドレスを使用されています');
+		}
+
+		const now = new Date();
+		const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
+
+		//token生成
+		await this.prismaService.token.create({
+			data: {
+				token: uuidv7(),
+				type: 'EMAIL_CHANGE',
+				expired_at: oneHourLater,
+				user_id: id,
+			},
+		});
+
+		//メール送信処理
 	}
 }
