@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { uuidv7 } from '@kripod/uuidv7';
 import { SignUpInput } from './dto/signup.input';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './types/jwtPayload';
+import { JwtPayload } from './types/jwt-payload';
 import { PasswordOmitUsers } from './types/passwordOmitUsers';
 
 @Injectable()
