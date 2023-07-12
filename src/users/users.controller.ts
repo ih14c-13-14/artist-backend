@@ -43,4 +43,18 @@ export class UsersController {
 	): Promise<Users> {
 		return this.usersService.passwordChange(id, newPassword);
 	}
+
+	//新しいメールアドレスの受け取り
+	@HttpCode(200)
+	@Post(':user_id/email-change')
+	async getNewEmail(
+		@Param(
+			'user_id' satisfies paths['/api/v1/users/{user_id}/email-change']['post']['parameters']['path']['user_id'],
+			new ParseUUIDPipe(),
+		)
+		id: string,
+		@Body() newEmail: EmailValidation,
+	) {
+		return this.usersService.getNewEmail(id, newEmail);
+	}
 }
