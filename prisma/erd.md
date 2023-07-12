@@ -18,7 +18,7 @@ EMAIL_CHANGE EMAIL_CHANGE
   
 
   "Prefectures" {
-    String id "🗝️"
+    Int id "🗝️"
     String name 
     }
   
