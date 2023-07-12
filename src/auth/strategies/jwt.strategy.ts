@@ -21,8 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		const user = await this.authService.getUser(payload.email);
 
 		if (user) {
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const { password, ...result } = user;
+			const { password: _password, ...result } = user;
 			return result;
 		}
 
