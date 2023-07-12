@@ -10,6 +10,7 @@ import { PasswordChange } from './dto/password-change';
 import { paths } from '@/generated/schema';
 import * as bcrypt from 'bcrypt';
 import { uuidv7 } from '@kripod/uuidv7';
+import { UserInfoResponse } from './dto/user-info-response';
 
 @Injectable()
 export class UsersService {
@@ -99,7 +100,7 @@ export class UsersService {
 		if (!userId) {
 			throw new HttpException(
 				{
-					type: 'validateion',
+					type: 'validation',
 					message: [
 						{
 							property: 'user_id',
@@ -117,7 +118,7 @@ export class UsersService {
 		if (userEmail) {
 			throw new HttpException(
 				{
-					type: 'validateion',
+					type: 'validation',
 					message: [
 						{
 							property: 'email',
@@ -145,5 +146,23 @@ export class UsersService {
 		});
 
 		//メール送信処理
+	}
+
+	async getUserInfoByUserId(user_id: string): Promise<UserInfoResponse> {
+		return await this.prismaService.users.findUnique({
+			select: {
+				age_group: true,
+				prefecture: {
+					select: {
+						name: true,
+					},
+				},
+				gender: true,
+				email: true,
+			},
+			where: {
+				id: user_id,
+			},
+		});
 	}
 }
