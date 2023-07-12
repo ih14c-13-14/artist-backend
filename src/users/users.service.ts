@@ -88,6 +88,7 @@ export class UsersService {
 				prefecture: { connect: { id: prefectureId.id } },
 			},
 		});
+	}
     
 	//新しいメールアドレスを受け取る
 	async getNewEmail(id: string, newEmail: EmailValidation) {
