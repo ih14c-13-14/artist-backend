@@ -10,6 +10,13 @@ export const ageMapping: Record<number, string> = {
 	9: '90代',
 };
 
+const getAllAge = () => {
+	return Object.entries(ageMapping).map(([id, name]) => ({
+		id: Number(id),
+		name,
+	}));
+};
+
 const convertNumberToAge = (ageNum: number): string | undefined => {
 	const age = ageMapping[ageNum];
 	return age;
@@ -24,4 +31,4 @@ const convertAgeToNumber = (ageStr: string): number | undefined => {
 	return undefined;
 };
 
-export { convertAgeToNumber, convertNumberToAge };
+export { getAllAge, convertAgeToNumber, convertNumberToAge };
