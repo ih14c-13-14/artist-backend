@@ -732,7 +732,7 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
-"@mermaid-js/mermaid-cli@^10.1.0", "@mermaid-js/mermaid-cli@^10.2.4":
+"@mermaid-js/mermaid-cli@^10.2.4":
   version "10.2.4"
   resolved "https://registry.yarnpkg.com/@mermaid-js/mermaid-cli/-/mermaid-cli-10.2.4.tgz#2e2bd1e0c811e907885356b6379abdf83ae6a495"
   integrity sha512-5y2wPpLE8AJiCODVXmcccTAbSvkCQ1EtJJahQoGsbcyTTVMrr7C7sW8VUELHI4JjlekU5+czAyDH2+PJI0ZBkQ==
@@ -755,10 +755,10 @@
     got "^11.8.5"
     os-filter-obj "^2.0.0"
 
-"@nestjs/cli@^10.1.7":
-  version "10.1.7"
-  resolved "https://registry.yarnpkg.com/@nestjs/cli/-/cli-10.1.7.tgz#8f708086acedb3a8287969d7fc02b8b593157ba1"
-  integrity sha512-YybaBuZpVhdT/ouVNnVUdpoPiuZ108GhY5eMuQJmMpA8FWLvLhyho0cSL36JCmqguyoQUMjZ+BeqaOAUgBRVuA==
+"@nestjs/cli@^10.1.8":
+  version "10.1.8"
+  resolved "https://registry.yarnpkg.com/@nestjs/cli/-/cli-10.1.8.tgz#8b64797c256d81b39047f26ed8cb2b647f7ec19f"
+  integrity sha512-ge9NQdnDKc9ANKA+1xEckOWgGe3bnuWhQagpnhrspV0lMi+LZm6a0XF8ptVdJB3Ghclbfdh+1XF5XlieIcbVRw==
   dependencies:
     "@angular-devkit/core" "16.1.3"
     "@angular-devkit/schematics" "16.1.3"
@@ -902,7 +902,7 @@
   resolved "https://registry.yarnpkg.com/@prisma/engines/-/engines-4.16.2.tgz#5ec8dd672c2173d597e469194916ad4826ce2e5f"
   integrity sha512-vx1nxVvN4QeT/cepQce68deh/Turxy5Mr+4L4zClFuK1GlxN3+ivxfuv+ej/gvidWn1cE1uAhW7ALLNlYbRUAw==
 
-"@prisma/generator-helper@^4.16.2":
+"@prisma/generator-helper@^4.16.0", "@prisma/generator-helper@^4.16.2":
   version "4.16.2"
   resolved "https://registry.yarnpkg.com/@prisma/generator-helper/-/generator-helper-4.16.2.tgz#a50b0d595d0a5350619e530d410ebaa815a89a25"
   integrity sha512-bMOH7y73Ui7gpQrioFeavMQA+Tf8ksaVf8Nhs9rQNzuSg8SSV6E9baczob0L5KGZTSgYoqnrRxuo03kVJYrnIg==
@@ -2542,10 +2542,10 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
-dotenv@^16.0.3:
-  version "16.1.4"
-  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.1.4.tgz#67ac1a10cd9c25f5ba604e4e08bc77c0ebe0ca8c"
-  integrity sha512-m55RtE8AsPeJBpOIFKihEmqUcoVncQIwo7x9U8ZwLEZw9ZpXboz2c+rvog+jUaJvVrZ5kBOeYQBX5+8Aa/OZQw==
+dotenv@^16.3.1:
+  version "16.3.1"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.3.1.tgz#369034de7d7e5b120972693352a3bf112172cc3e"
+  integrity sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==
 
 ecdsa-sig-formatter@1.0.11:
   version "1.0.11"
@@ -4556,10 +4556,10 @@ onetime@^5.1.0, onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-openapi-typescript@^6.3.2:
-  version "6.3.2"
-  resolved "https://registry.yarnpkg.com/openapi-typescript/-/openapi-typescript-6.3.2.tgz#457d9443faa99060a49c00a580c4182bedcca708"
-  integrity sha512-cvMRbO8vBQo+mdkY3vWtH3iCWw8D5MBvkZ3Mnpgk8AEqabhDMV6gu0TE2BrvG4RmEeajFRo1iornhOPxLm7PMg==
+openapi-typescript@^6.3.4:
+  version "6.3.4"
+  resolved "https://registry.yarnpkg.com/openapi-typescript/-/openapi-typescript-6.3.4.tgz#5351a73666e876206c50d8c100c8e8b2e4718882"
+  integrity sha512-icWb7WBBFr8+RxX7NZC5ez0WkTSQAScLnI33vHRLvWxkpOGKLlp94C0wcicZWzh85EoIoFjO+tujcQxo7zeZdA==
   dependencies:
     ansi-colors "^4.1.3"
     fast-glob "^3.3.0"
@@ -4823,13 +4823,14 @@ pretty-format@^29.0.0, pretty-format@^29.6.1:
     ansi-styles "^5.0.0"
     react-is "^18.0.0"
 
-prisma-erd-generator@^1.6.2:
-  version "1.6.2"
-  resolved "https://registry.yarnpkg.com/prisma-erd-generator/-/prisma-erd-generator-1.6.2.tgz#36fcb7692a46dac09f9aed91a46d7a625e335533"
-  integrity sha512-oX5nqBiyjKrR8+hJF0kBR9F8fKHFGmRshQRr5LUjVszykyWiBnTBxnrKvZoSRKp9v74VGN6VhpLuihfwckgFeg==
+prisma-erd-generator@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/prisma-erd-generator/-/prisma-erd-generator-1.8.0.tgz#6835f8fe8998f84178c8383a2004fca420f8bbef"
+  integrity sha512-ATl9OOKCjqnU7dpYyTaVVNzFE7JtkFKoaJaxjQ+yQRrSGReTe6l7SQQAmZIZAvtcE2sfBl0fsYoubSwptWQNFA==
   dependencies:
-    "@mermaid-js/mermaid-cli" "^10.1.0"
-    dotenv "^16.0.3"
+    "@mermaid-js/mermaid-cli" "^10.2.4"
+    "@prisma/generator-helper" "^4.16.0"
+    dotenv "^16.3.1"
 
 prisma@^4.16.2:
   version "4.16.2"
