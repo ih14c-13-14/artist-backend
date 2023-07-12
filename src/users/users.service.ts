@@ -67,21 +67,45 @@ export class UsersService {
 		const userId = await this.prismaService.users.findFirst({
 			where: { id: id },
 		});
+		if (!userId) {
+			throw new HttpException(
+				{
+					type: 'validateion',
+					message: [
+						{
+							property: 'user_id',
+							message: 'ユーザーidが存在しません',
+						},
+					],
+				} satisfies paths['/api/v1/users/{user_id}/email-change']['post']['responses']['400']['content']['application/json'],
+				HttpStatus.BAD_REQUEST,
+			);
+		}
+
 		const userEmail = await this.prismaService.users.findFirst({
 			where: { email: newEmail.email },
 		});
-
-		if (!userId) {
-			throw new Error('ユーザーが存在していません');
-		}
 		if (userEmail) {
-			throw new Error('他のユーザーがメールアドレスを使用されています');
+			throw new HttpException(
+				{
+					type: 'validateion',
+					message: [
+						{
+							property: 'email',
+							message: 'このメールアドレスはすでに登録されています',
+						},
+					],
+				} satisfies paths['/api/v1/users/{user_id}/email-change']['post']['responses']['400']['content']['application/json'],
+				HttpStatus.BAD_REQUEST,
+			);
 		}
 
 		const now = new Date();
 		const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
 
-		//token生成
+		/**
+		 * トークンを生成し、1時間後のデータと共にデータベースに挿入します。
+		 */
 		await this.prismaService.token.create({
 			data: {
 				token: uuidv7(),
