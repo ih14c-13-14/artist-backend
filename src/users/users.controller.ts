@@ -43,6 +43,7 @@ export class UsersController {
 		@Body() newPassword: PasswordChange,
 	): Promise<Users> {
 		return this.usersService.passwordChange(id, newPassword);
+	}
     
     //他情報変更処理
 	@Put(':user_id/others-change')
