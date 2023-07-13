@@ -1,9 +1,7 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Users } from '@prisma/client';
-import { InformationChangeValidation } from './dto/informationChange-validation';
-import { convertAgeGroupToNumber } from '@/auth/utils/convertAge';
-import { convertGenderToNumber } from '@/auth/utils/convertGender';
+import { InformationChangeValidation } from './dto/information-change-validation';
 import { isNil } from 'lodash';
 import { EmailValidation } from './dto/email-validation';
 import { PasswordChange } from './dto/password-change';
@@ -72,19 +70,12 @@ export class UsersService {
 	) {
 		const { age_group, gender, prefecture } = informationInput;
 
-		const selectedAgeGroup: number = convertAgeGroupToNumber(age_group);
-		const selectedGender: number = convertGenderToNumber(gender);
-
-		const prefectureId = await this.prismaService.prefectures.findFirst({
-			where: { name: prefecture },
-		});
-
 		return await this.prismaService.users.update({
 			where: { id: id },
 			data: {
-				age_group: selectedAgeGroup,
-				gender: selectedGender,
-				prefecture: { connect: { id: prefectureId.id } },
+				age_group: parseInt(age_group.toString(), 10),
+				gender: parseInt(gender.toString(), 10),
+				prefecture_id: parseInt(prefecture.toString(), 10),
 			},
 		});
 	}

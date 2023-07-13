@@ -14,7 +14,7 @@ import { paths } from '@/generated/schema';
 import { UsersService } from './users.service';
 import { EmailValidation } from './dto/email-validation';
 import { PasswordChange } from './dto/password-change';
-import { InformationChangeValidation } from './dto/informationChange-validation';
+import { InformationChangeValidation } from './dto/information-change-validation';
 import { convertNumberToAge } from '@/utils/convert-age';
 import { convertNumberToGender } from '@/utils/convert-gender';
 import { UserInfoDTO } from './dto/user-info';
