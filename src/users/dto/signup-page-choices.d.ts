@@ -1,4 +1,4 @@
-export type signUpPageChoicesDTO = {
+export type SignUpPageChoicesDTO = {
 	age_groupChoices: {
 		id: number;
 		name: string;

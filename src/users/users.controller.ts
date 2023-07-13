@@ -18,6 +18,7 @@ import { convertNumberToAge, getAllAge } from '@/utils/convert-age';
 import { convertNumberToGender, getAllGender } from '@/utils/convert-gender';
 import { UserInfoDTO } from './dto/user-info';
 import { PrefecturesService } from '@/prefectures/prefectures.service';
+import { SignUpPageChoicesDTO } from './dto/signup-page-choices';
 
 @Controller('users')
 export class UsersController {
@@ -95,7 +96,7 @@ export class UsersController {
 	 * @returns paths['/api/v1/users/signup-page/choices']['get']['responses']['200']
 	 */
 	@Get('signup-page/choices')
-	async getSignUpPageChoices() {
+	async getSignUpPageChoices(): Promise<SignUpPageChoicesDTO> {
 		const age_group = getAllAge();
 		const gender = getAllGender();
 		const prefectures = await this.prefecturesService.getAll();
