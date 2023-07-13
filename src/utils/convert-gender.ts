@@ -4,6 +4,13 @@ export const genderMapping: Record<number, string> = {
 	9: 'その他',
 };
 
+const getAllGender = () => {
+	return Object.entries(genderMapping).map(([id, name]) => ({
+		id: Number(id),
+		name,
+	}));
+};
+
 const convertNumberToGender = (genderNum: number): string | undefined => {
 	const gender = genderMapping[genderNum];
 	return gender;
@@ -18,4 +25,4 @@ const convertGenderToNumber = (genderStr: string): number | undefined => {
 	return undefined;
 };
 
-export { convertNumberToGender, convertGenderToNumber };
+export { getAllGender, convertNumberToGender, convertGenderToNumber };

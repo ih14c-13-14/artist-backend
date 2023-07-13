@@ -7,22 +7,24 @@ import {
 	HttpCode,
 	ParseUUIDPipe,
 	Get,
+	InternalServerErrorException,
 } from '@nestjs/common';
-import { PrismaService } from '@/prisma/prisma.service';
+import { UsersService } from './users.service';
 import { Users } from '@prisma/client';
 import { paths } from '@/generated/schema';
-import { UsersService } from './users.service';
 import { EmailValidation } from './dto/email-validation';
 import { PasswordChange } from './dto/password-change';
-import { convertNumberToAge } from '@/utils/convert-age';
-import { convertNumberToGender } from '@/utils/convert-gender';
+import { convertNumberToAge, getAllAge } from '@/utils/convert-age';
+import { convertNumberToGender, getAllGender } from '@/utils/convert-gender';
 import { UserInfoDTO } from './dto/user-info';
+import { PrefecturesService } from '@/prefectures/prefectures.service';
+import { SignUpPageChoicesDTO } from './dto/signup-page-choices';
 
 @Controller('users')
 export class UsersController {
 	constructor(
 		private readonly usersService: UsersService,
-		private readonly prismaService: PrismaService,
+		private readonly prefecturesService: PrefecturesService,
 	) {}
 
 	// email認証処理
@@ -87,5 +89,31 @@ export class UsersController {
 		};
 
 		return result satisfies paths['/api/v1/users/{user_id}/info']['get']['responses']['200']['content']['application/json'];
+	}
+
+	/**
+	 * インプットの選択肢を返却する。
+	 * @returns paths['/api/v1/users/signup-page/choices']['get']['responses']['200']
+	 */
+	@Get('signup-page/choices')
+	async getSignUpPageChoices(): Promise<SignUpPageChoicesDTO> {
+		const age_group = getAllAge();
+		const gender = getAllGender();
+		const prefectures = await this.prefecturesService.getAll();
+
+		/**
+		 * DBに格納されている値が不正な時。
+		 * @throws paths['/api/v1/users/signup-page/choices']['get']['responses']['500']
+		 */
+		if (age_group === undefined || gender === undefined) {
+			throw new InternalServerErrorException() satisfies paths['/api/v1/users/signup-page/choices']['get']['responses']['500']['content']['application/json'];
+		}
+
+		const result = {
+			age_groupChoices: age_group,
+			prefectureChoices: prefectures,
+			genderChoices: gender,
+		} as const;
+		return result satisfies paths['/api/v1/users/signup-page/choices']['get']['responses']['200']['content']['application/json'];
 	}
 }
