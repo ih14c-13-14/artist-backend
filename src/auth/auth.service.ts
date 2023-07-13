@@ -3,13 +3,10 @@ import { Injectable } from '@nestjs/common';
 import { Users } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { uuidv7 } from '@kripod/uuidv7';
-import { convertAgeGroupToNumber } from '@/auth/utils/convertAge';
-import { convertGenderToNumber } from '@/auth/utils/convertGender';
 import { SignUpInput } from './dto/signup.input';
 import { JwtService } from '@nestjs/jwt';
-import { JwtPayload } from './types/jwtPayload';
+import { JwtPayload } from './types/jwt-payload';
 import { PasswordOmitUsers } from './types/passwordOmitUsers';
-import { TOKENS } from '@/config';
 
 @Injectable()
 export class AuthService {
@@ -24,24 +21,19 @@ export class AuthService {
 		const salt = await bcrypt.genSalt();
 		const hashPassword = await bcrypt.hash(password, salt);
 
-		const selectedAgeGroup: number = convertAgeGroupToNumber(age_group);
-		const selectedGender: number = convertGenderToNumber(gender);
-
-		const prefectureId = await this.prismaService.prefectures.findFirst({
-			where: { name: prefecture },
-		});
-
-		// TODO: prefectureIdが見つからなかった場合の例外処理を書く
-		if (!prefectureId) throw new Error('都道府県コードが見つかりません');
+		// TODO:age_group, gender, prefectureをnumber型に変換する際にエラーが発生した場合の処理
+		const age_group_number = Number(age_group);
+		const gender_number = Number(gender);
+		const prefecture_number = Number(prefecture);
 
 		return await this.prismaService.users.create({
 			data: {
 				id: uuidv7(),
 				email,
 				password: hashPassword,
-				age_group: selectedAgeGroup,
-				gender: selectedGender,
-				prefecture: { connect: { id: prefectureId.id } },
+				age_group: age_group_number,
+				gender: gender_number,
+				prefecture: { connect: { id: prefecture_number } },
 			},
 		});
 	}
@@ -82,7 +74,6 @@ export class AuthService {
 		const payload: JwtPayload = {
 			email: user.email,
 			sub: user.id,
-			exp: Number(TOKENS.ACCESS_EXPIRES_IN),
 		};
 		const accessToken = await this.jwtService.signAsync(payload);
 		return accessToken;

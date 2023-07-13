@@ -9,7 +9,12 @@ import {
 
 export class SignUpInput {
 	// TODO: message考える
-	@IsEmail({})
+	@IsEmail(
+		{},
+		{
+			message: 'メールアドレスの形式が正しくありません',
+		},
+	)
 	@IsNotEmpty({
 		message: 'メールアドレスを入力してください',
 	})
@@ -26,14 +31,23 @@ export class SignUpInput {
 		// TODO: message考える
 		message: '次の形式と一致する必要があります:',
 	})
+	@IsNotEmpty({
+		message: 'パスワードを入力してください',
+	})
 	password: string;
 
-	@IsNotEmpty()
-	age_group: string;
+	@IsNotEmpty({
+		message: '年齢を選択してください',
+	})
+	age_group: number;
 
-	@IsNotEmpty()
-	gender: string;
+	@IsNotEmpty({
+		message: '性別を選択してください',
+	})
+	gender: number;
 
-	@IsNotEmpty()
-	prefecture: string;
+	@IsNotEmpty({
+		message: '都道府県を選択してください',
+	})
+	prefecture: number;
 }
