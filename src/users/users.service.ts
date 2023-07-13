@@ -141,10 +141,25 @@ export class UsersService {
 			);
 		}
 
-		await this.prismaService.users.update({
+		const user = await this.prismaService.users.update({
 			where: { id: id },
 			data: { email: email.email },
 		});
+
+		if (!user) {
+			throw new HttpException(
+				{
+					type: 'validation',
+					message: [
+						{
+							property: 'user_id',
+							message: 'ユーザーidが存在しません',
+						},
+					],
+				} satisfies paths['/api/v1/users/{user_id}/email-change/verify']['put']['responses']['400']['content']['application/json'],
+				HttpStatus.BAD_REQUEST,
+			);
+		}
 	}
 
 	async getUserInfoByUserId(user_id: string): Promise<UserInfoResponse> {
