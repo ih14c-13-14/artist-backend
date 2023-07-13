@@ -140,6 +140,14 @@ export class UsersService {
 				HttpStatus.FORBIDDEN,
 			);
 		}
+		if (!(token.user_id === id)) {
+			throw new HttpException(
+				{
+					message: 'Not Found.',
+				} satisfies paths['/api/v1/users/{user_id}/email-change/verify']['put']['responses']['404']['content']['application/json'],
+				HttpStatus.NOT_FOUND,
+			);
+		}
 
 		const user = await this.prismaService.users.update({
 			where: { id: id },
