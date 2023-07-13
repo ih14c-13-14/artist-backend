@@ -73,9 +73,9 @@ export class UsersService {
 		return await this.prismaService.users.update({
 			where: { id: id },
 			data: {
-				age_group: parseInt(age_group.toString(), 10),
-				gender: parseInt(gender.toString(), 10),
-				prefecture_id: parseInt(prefecture.toString(), 10),
+				age_group: Number(age_group),
+				gender: Number(gender),
+				prefecture_id: Number(prefecture),
 			},
 		});
 	}
