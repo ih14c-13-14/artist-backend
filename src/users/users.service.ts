@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { uuidv7 } from '@kripod/uuidv7';
 import { UserInfoResponse } from './dto/user-info-response';
 import { EmailChange } from './dto/email-change';
+import { CurrentInfoResponse } from './dto/current-info-response';
 
 @Injectable()
 export class UsersService {
@@ -181,6 +182,19 @@ export class UsersService {
 				},
 				gender: true,
 				email: true,
+			},
+			where: {
+				id: user_id,
+			},
+		});
+	}
+
+	async getCurrentUserInfo(user_id: string): Promise<CurrentInfoResponse> {
+		return await this.prismaService.users.findUnique({
+			select: {
+				age_group: true,
+				gender: true,
+				prefecture_id: true,
 			},
 			where: {
 				id: user_id,

@@ -16,16 +16,19 @@ import { EmailValidation } from './dto/email-validation';
 import { PasswordChange } from './dto/password-change';
 import { convertNumberToAge, getAllAge } from '@/utils/convert-age';
 import { convertNumberToGender, getAllGender } from '@/utils/convert-gender';
-import { UserInfoDTO } from './dto/user-info';
+import { JwtStrategy } from '@/auth/strategies/jwt.strategy';
 import { PrefecturesService } from '@/prefectures/prefectures.service';
 import { SignUpPageChoicesDTO } from './dto/signup-page-choices';
 import { EmailChange } from './dto/email-change';
+import { UserInfoDTO } from './dto/user-info';
+import { OtherChangePageChoices } from './dto/others-change-page-choices';
 
 @Controller('users')
 export class UsersController {
 	constructor(
 		private readonly usersService: UsersService,
 		private readonly prefecturesService: PrefecturesService,
+		private readonly jwtStrategy: JwtStrategy,
 	) {}
 
 	// email認証処理
@@ -128,5 +131,34 @@ export class UsersController {
 			genderChoices: gender,
 		} as const;
 		return result satisfies paths['/api/v1/users/signup-page/choices']['get']['responses']['200']['content']['application/json'];
+	}
+
+	/*
+	 * 情報更新インプットの選択肢といまのユーザの情報を返却する。
+	 * @returns paths['/api/v1/users/others-change-page/choices']['get']['responses']['200']
+	 */
+	// @UseGuards(JwtAuthGuard)
+	@Get('others-change-page/choices')
+	async getOthersChangePageChoices(): Promise<OtherChangePageChoices> {
+		// TODO: tokenからuserIdを受け取る。今は直接入れとく
+		const user_id = '0189481b-5f48-7000-8d09-6750c73c2413';
+
+		const {
+			age_group,
+			gender,
+			prefecture_id: prefecture,
+		} = await this.usersService.getCurrentUserInfo(user_id);
+
+		const currentValues = { age_group, gender, prefecture };
+		const age_groupChoices = getAllAge();
+		const genderChoices = getAllGender();
+		const prefectureChoices = await this.prefecturesService.getAll();
+
+		return {
+			currentValues,
+			age_groupChoices,
+			genderChoices,
+			prefectureChoices,
+		} as const satisfies paths['/api/v1/users/others-change-page/choices']['get']['responses']['200']['content']['application/json'];
 	}
 }
