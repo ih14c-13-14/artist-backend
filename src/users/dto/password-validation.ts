@@ -6,7 +6,7 @@ import {
 	MinLength,
 } from 'class-validator';
 
-export class PasswordChange {
+export class PasswordValidation {
 	@IsNotEmpty()
 	@IsString()
 	@MinLength(8, {

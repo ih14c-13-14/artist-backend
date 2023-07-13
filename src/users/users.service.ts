@@ -3,7 +3,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Users } from '@prisma/client';
 import { isNil } from 'lodash';
 import { EmailValidation } from './dto/email-validation';
-import { PasswordChange } from './dto/password-change';
+import { PasswordValidation } from './dto/password-validation';
 import { paths } from '@/generated/schema';
 import * as bcrypt from 'bcrypt';
 import { uuidv7 } from '@kripod/uuidv7';
@@ -42,9 +42,9 @@ export class UsersService {
 	}
 
 	// パスワード変更
-	async passwordChange(
+	async passwordUpdate(
 		id: string,
-		newPassword: PasswordChange,
+		newPassword: PasswordValidation,
 	): Promise<Users> {
 		const salt = await bcrypt.genSalt();
 		const hashPassword = await bcrypt.hash(newPassword.password, salt);

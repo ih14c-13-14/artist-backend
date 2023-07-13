@@ -13,7 +13,7 @@ import { UsersService } from './users.service';
 import { Users } from '@prisma/client';
 import { paths } from '@/generated/schema';
 import { EmailValidation } from './dto/email-validation';
-import { PasswordChange } from './dto/password-change';
+import { PasswordValidation } from './dto/password-validation';
 import { convertNumberToAge, getAllAge } from '@/utils/convert-age';
 import { convertNumberToGender, getAllGender } from '@/utils/convert-gender';
 import { JwtStrategy } from '@/auth/strategies/jwt.strategy';
@@ -48,9 +48,9 @@ export class UsersController {
 			new ParseUUIDPipe(),
 		)
 		id: string,
-		@Body() newPassword: PasswordChange,
+		@Body() newPassword: PasswordValidation,
 	): Promise<Users> {
-		return this.usersService.passwordChange(id, newPassword);
+		return this.usersService.passwordUpdate(id, newPassword);
 	}
 
 	//新しいメールアドレスの受け取り
