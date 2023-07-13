@@ -3,7 +3,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthService } from '../auth.service';
 import { TOKENS } from '@/config';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { JwtPayload } from '../types/jwtPayload';
+import { JwtPayload } from '../types/jwt-payload';
 import { paths } from '@/generated/schema';
 import { PasswordOmitUsers } from '../types/passwordOmitUsers';
 
@@ -21,8 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 		const user = await this.authService.getUser(payload.email);
 
 		if (user) {
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const { password, ...result } = user;
+			const { password: _password, ...result } = user;
 			return result;
 		}
 
