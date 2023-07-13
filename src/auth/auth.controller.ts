@@ -10,14 +10,20 @@ import { AuthService } from './auth.service';
 import { SignUpInput } from './dto/signup.input';
 import { paths } from '@/generated/schema';
 import { SignInInput } from './dto/signin.input';
+import { SignUpResponse } from './dto/signup-response';
 
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
+	/**
+	 * 会員登録
+	 * @param signUpInput メールアドレス、パスワード、年齢、性別、都道府県
+	 * @returns paths['/api/v1/auth/signup']['post']['responses']['200']
+	 */
 	@HttpCode(200)
 	@Post('signup')
-	async signUp(@Body() signUpInput: SignUpInput): Promise<object> {
+	async signUp(@Body() signUpInput: SignUpInput): Promise<SignUpResponse> {
 		const user = await this.authService.getUser(signUpInput.email);
 		/**
 		 * emailがすでに登録されている場合の処理
@@ -50,14 +56,18 @@ export class AuthController {
 				} satisfies paths['/api/v1/auth/signup']['post']['responses']['500']['content']['application/json'],
 				HttpStatus.INTERNAL_SERVER_ERROR,
 			);
-		// TODO: JWTを返す。一旦文字列で#106で対応
+
+		const { password: _password, ...result } = newUser;
+
+		const accessToken = await this.authService.signIn(result);
+
 		return {
-			access_token: '会員登録が完了しました',
+			access_token: accessToken,
 		} satisfies paths['/api/v1/auth/signup']['post']['responses']['200']['content']['application/json'];
 	}
 
 	/**
-	 * ログイン処理
+	 * サインイン
 	 * @param signInInput  ログイン情報
 	 * @returns {object}   JWTトークン
 	 */
