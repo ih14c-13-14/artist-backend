@@ -124,21 +124,22 @@ export class UsersService {
 		const token = await this.prismaService.token.findFirst({
 			where: { token: email.token },
 		});
+		if (!token) {
+			throw new HttpException(
+				{
+					message: 'Forbidden.',
+				} satisfies paths['/api/v1/users/{user_id}/email-change/verify']['put']['responses']['403']['content']['application/json'],
+				HttpStatus.FORBIDDEN,
+			);
+		}
 		if (!(token.expired_at > new Date())) {
+			throw new HttpException(
+				{
+					message: 'Forbidden.',
+				} satisfies paths['/api/v1/users/{user_id}/email-change/verify']['put']['responses']['403']['content']['application/json'],
+				HttpStatus.FORBIDDEN,
+			);
 		}
-
-		console.log(token.created_at);
-		console.log(token.updated_at);
-		if (token.created_at === token.updated_at) {
-			console.log('一緒');
-		} else {
-			console.log('違う');
-		}
-
-		console.log(token.created_at);
-		console.log(token.updated_at);
-		console.log(token.created_at === token.updated_at);
-		console.log(new Date(token.created_at) === new Date(token.updated_at));
 
 		await this.prismaService.users.update({
 			where: { id: id },
