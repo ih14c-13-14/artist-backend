@@ -132,7 +132,7 @@ export class UsersService {
 				HttpStatus.FORBIDDEN,
 			);
 		}
-		if (!(token.expired_at > new Date())) {
+		if (!(token.expired_at > new Date()) || !(token.type === 'EMAIL_CHANGE')) {
 			throw new HttpException(
 				{
 					message: 'Forbidden.',
