@@ -19,6 +19,7 @@ import { convertNumberToGender, getAllGender } from '@/utils/convert-gender';
 import { UserInfoDTO } from './dto/user-info';
 import { PrefecturesService } from '@/prefectures/prefectures.service';
 import { SignUpPageChoicesDTO } from './dto/signup-page-choices';
+import { EmailChange } from './dto/email-change';
 
 @Controller('users')
 export class UsersController {
@@ -62,6 +63,18 @@ export class UsersController {
 		@Body() newEmail: EmailValidation,
 	) {
 		return this.usersService.getNewEmail(id, newEmail);
+	}
+	//メールアドレス変更
+	@Put(':user_id/email-change/verify')
+	async changeEmail(
+		@Param(
+			'user_id' satisfies paths['/api/v1/users/{user_id}/email-change/verify']['put']['parameters']['path']['user_id'],
+			new ParseUUIDPipe(),
+		)
+		id: string,
+		@Body() email: EmailChange,
+	) {
+		return this.usersService.changeEmail(id, email);
 	}
 
 	/**

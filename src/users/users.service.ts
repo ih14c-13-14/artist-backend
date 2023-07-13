@@ -8,6 +8,7 @@ import { paths } from '@/generated/schema';
 import * as bcrypt from 'bcrypt';
 import { uuidv7 } from '@kripod/uuidv7';
 import { UserInfoResponse } from './dto/user-info-response';
+import { EmailChange } from './dto/email-change';
 
 @Injectable()
 export class UsersService {
@@ -117,6 +118,32 @@ export class UsersService {
 		});
 
 		//メール送信処理
+	}
+	//メールアドレス変更
+	async changeEmail(id: string, email: EmailChange) {
+		const token = await this.prismaService.token.findFirst({
+			where: { token: email.token },
+		});
+		if (!(token.expired_at > new Date())) {
+		}
+
+		console.log(token.created_at);
+		console.log(token.updated_at);
+		if (token.created_at === token.updated_at) {
+			console.log('一緒');
+		} else {
+			console.log('違う');
+		}
+
+		console.log(token.created_at);
+		console.log(token.updated_at);
+		console.log(token.created_at === token.updated_at);
+		console.log(new Date(token.created_at) === new Date(token.updated_at));
+
+		await this.prismaService.users.update({
+			where: { id: id },
+			data: { email: email.email },
+		});
 	}
 
 	async getUserInfoByUserId(user_id: string): Promise<UserInfoResponse> {
