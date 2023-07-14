@@ -18,17 +18,13 @@ export class UsersService {
 	// email認証
 	async getUserEmail(email: EmailValidation) {
 		const { email: userEmail } = email;
-		const get_email = await this.prismaService.users.findUnique({
+		const user = await this.prismaService.users.findFirst({
 			where: {
 				email: userEmail,
 			},
-			select: {
-				id: true,
-				email: true,
-			},
 		});
 
-		if (isNil(get_email?.email)) {
+		if (isNil(user?.email)) {
 			throw new HttpException(
 				{
 					message: 'Not Found.',
@@ -36,6 +32,23 @@ export class UsersService {
 				HttpStatus.NOT_FOUND,
 			);
 		}
+
+		const now = new Date();
+		const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
+
+		/**
+		 * トークンを生成し、1時間後のデータと共にデータベースに挿入します。
+		 */
+		await this.prismaService.token.create({
+			data: {
+				token: uuidv7(),
+				type: TokenType.PASSWORD_RESET,
+				expired_at: oneHourLater,
+				user_id: user.id,
+			},
+		});
+
+		//Todoメール送信
 
 		return {
 			message: '成功',

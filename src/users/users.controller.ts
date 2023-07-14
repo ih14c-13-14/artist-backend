@@ -34,10 +34,10 @@ export class UsersController {
 	// email認証処理
 	@HttpCode(200)
 	@Post('password-reset')
-	async getUserEmail(@Body() updateUsersInput: EmailValidation) {
+	async getUserEmail(@Body() email: EmailValidation) {
 		//userServiceのgetUserEmail(入力されたemail)を呼び出す
 		return (await this.usersService.getUserEmail(
-			updateUsersInput,
+			email,
 		)) satisfies paths['/api/v1/users/password-reset']['post']['responses']['200']['content']['application/json'];
 	}
 	// パスワードリセット
