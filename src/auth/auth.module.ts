@@ -12,8 +12,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 		PrismaModule,
 		PassportModule.register({ defaultStrategy: 'jwt' }),
 		JwtModule.register({
-			secret:
-			process.env.JWT_ACCESS_TOKEN_SECRET,
+			secret: process.env.JWT_ACCESS_TOKEN_SECRET,
 			signOptions: {
 				expiresIn: 3600,
 			},
