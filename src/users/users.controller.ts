@@ -19,6 +19,7 @@ import { convertNumberToGender, getAllGender } from '@/utils/convert-gender';
 import { JwtStrategy } from '@/auth/strategies/jwt.strategy';
 import { PrefecturesService } from '@/prefectures/prefectures.service';
 import { SignUpPageChoicesDTO } from './dto/signup-page-choices';
+import { EmailChange } from './dto/email-change';
 import { UserInfoDTO } from './dto/user-info';
 import { OtherChangePageChoices } from './dto/others-change-page-choices';
 import { PasswordChange } from './dto/password-change';
@@ -83,6 +84,21 @@ export class UsersController {
 		@Body() newEmail: EmailValidation,
 	) {
 		return this.usersService.getNewEmail(id, newEmail);
+	}
+	//メールアドレス変更
+	@Put(':user_id/email-change/verify')
+	async changeEmail(
+		@Param(
+			'user_id' satisfies paths['/api/v1/users/{user_id}/email-change/verify']['put']['parameters']['path']['user_id'],
+			new ParseUUIDPipe(),
+		)
+		id: string,
+		@Body() email: EmailChange,
+	) {
+		return (await this.usersService.changeEmail(
+			id,
+			email,
+		)) satisfies paths['/api/v1/users/{user_id}/email-change/verify']['put']['responses']['200']['content']['application/json'];
 	}
 
 	/**

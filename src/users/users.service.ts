@@ -8,6 +8,7 @@ import { paths } from '@/generated/schema';
 import * as bcrypt from 'bcrypt';
 import { uuidv7 } from '@kripod/uuidv7';
 import { UserInfoResponse } from './dto/user-info-response';
+import { EmailChange } from './dto/email-change';
 import { CurrentInfoResponse } from './dto/current-info-response';
 import { PasswordChange } from './dto/password-change';
 
@@ -183,6 +184,59 @@ export class UsersService {
 		});
 
 		//メール送信処理
+	}
+	//メールアドレス変更
+	async changeEmail(id: string, email: EmailChange) {
+		const token = await this.prismaService.token.findFirst({
+			where: { token: email.token },
+		});
+		if (!token) {
+			throw new HttpException(
+				{
+					message: 'Forbidden.',
+				} satisfies paths['/api/v1/users/{user_id}/email-change/verify']['put']['responses']['403']['content']['application/json'],
+				HttpStatus.FORBIDDEN,
+			);
+		}
+		if (!(token.expired_at > new Date()) || !(token.type === 'EMAIL_CHANGE')) {
+			throw new HttpException(
+				{
+					message: 'Forbidden.',
+				} satisfies paths['/api/v1/users/{user_id}/email-change/verify']['put']['responses']['403']['content']['application/json'],
+				HttpStatus.FORBIDDEN,
+			);
+		}
+		if (!(token.user_id === id)) {
+			throw new HttpException(
+				{
+					message: 'Not Found.',
+				} satisfies paths['/api/v1/users/{user_id}/email-change/verify']['put']['responses']['404']['content']['application/json'],
+				HttpStatus.NOT_FOUND,
+			);
+		}
+
+		const user = await this.prismaService.users.update({
+			where: { id: id },
+			data: { email: email.email },
+		});
+
+		if (!user) {
+			throw new HttpException(
+				{
+					type: 'validation',
+					message: [
+						{
+							property: 'user_id',
+							message: 'ユーザーidが存在しません',
+						},
+					],
+				} satisfies paths['/api/v1/users/{user_id}/email-change/verify']['put']['responses']['400']['content']['application/json'],
+				HttpStatus.BAD_REQUEST,
+			);
+		}
+		return {
+			message: '成功',
+		} as const;
 	}
 
 	async getUserInfoByUserId(user_id: string): Promise<UserInfoResponse> {
