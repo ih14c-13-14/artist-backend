@@ -23,7 +23,6 @@ import { PrefecturesService } from '@/prefectures/prefectures.service';
 import { SignUpPageChoicesDTO } from './dto/signup-page-choices';
 import { UserInfoDTO } from './dto/user-info';
 import { OtherChangePageChoices } from './dto/others-change-page-choices';
-import { PasswordChange } from './dto/password-change';
 
 @Controller('users')
 export class UsersController {
