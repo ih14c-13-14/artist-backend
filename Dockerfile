@@ -26,7 +26,7 @@ RUN yarn install --frozen-lockfile --non-interactive --production=false \
 ARG NODE_ENV=production
 
 RUN git submodule update --init
-RUN pnpm build
+RUN yarn build
 RUN rm -rf .git/
 
 FROM --platform=$TARGETPLATFORM node:${NODE_VERSION}-slim AS runner
@@ -55,10 +55,9 @@ WORKDIR /artist
 
 COPY --chown=artist:artist --from=builder /artist/node_modules ./node_modules
 COPY --chown=artist:artist --from=builder /artist/dist ./dist
-COPY --chown=artist:artist --from=builder . ./
+COPY --chown=artist:artist --from=builder /artist/prisma /artist/prisma
+COPY --chown=artist:artist --from=builder /artist/package.json /artist/package.json
 COPY --link docker-entrypoint.sh /artist/docker-entrypoint.sh
-COPY --link --from=builder /artist/package.json /artist/package.json
-COPY --link --from=builder /artist/prisma /artist/prisma
 
 ENV NODE_ENV=production
 HEALTHCHECK --interval=5s --retries=20 CMD ["/bin/bash", "/artist/healthcheck.sh"]
