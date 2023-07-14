@@ -10,10 +10,8 @@ import {
 	InternalServerErrorException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { Users } from '@prisma/client';
 import { paths } from '@/generated/schema';
 import { EmailValidation } from './dto/email-validation';
-import { PasswordValidation } from './dto/password-validation';
 import { convertNumberToAge, getAllAge } from '@/utils/convert-age';
 import { convertNumberToGender, getAllGender } from '@/utils/convert-gender';
 import { JwtStrategy } from '@/auth/strategies/jwt.strategy';
@@ -22,6 +20,7 @@ import { SignUpPageChoicesDTO } from './dto/signup-page-choices';
 import { UserInfoDTO } from './dto/user-info';
 import { OtherChangePageChoices } from './dto/others-change-page-choices';
 import { PasswordChange } from './dto/password-change';
+import { UpdatePasswordValidation } from './dto/update-password-validation';
 
 @Controller('users')
 export class UsersController {
@@ -60,15 +59,18 @@ export class UsersController {
 
 	//パスワード変更処理
 	@Put(':user_id/password-change')
-	updateUserPassword(
+	async updateUserPassword(
 		@Param(
 			'user_id' satisfies paths['/api/v1/users/{user_id}/password-change']['put']['parameters']['path']['user_id'],
 			new ParseUUIDPipe(),
 		)
 		id: string,
-		@Body() newPassword: PasswordValidation,
-	): Promise<Users> {
-		return this.usersService.passwordUpdate(id, newPassword);
+		@Body() password: UpdatePasswordValidation,
+	): Promise<{ message: string }> {
+		return (await this.usersService.passwordUpdate(
+			id,
+			password,
+		)) satisfies paths['/api/v1/users/{user_id}/password-change']['put']['responses']['200']['content']['application/json'];
 	}
 
 	//新しいメールアドレスの受け取り
