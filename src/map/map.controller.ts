@@ -13,10 +13,11 @@ export class MapController {
 	 */
 	@Get()
 	async getAll(): Promise<MapDTO[]> {
-		const arts = await this.artsService.getAll();
+		const user_id = '0189481b-5f48-7000-8d09-6750c73c2413';
+		const arts = await this.artsService.getAll(user_id);
 		const result: MapDTO[] = arts.map((art) => ({
 			address: art.address,
-			arts_id: art.id,
+			art_id: art.id,
 		}));
 		return result satisfies paths['/api/v1/map']['get']['responses']['200']['content']['application/json'];
 	}

@@ -18,6 +18,7 @@ import { ArtDetailDTO } from './dto/art-detail';
 import { UserIdDTO } from './dto/user-id.dto';
 import { UsersService } from '@/users/users.service';
 @Controller('arts')
+// @UseGuards(JwtAuthGuard)
 export class ArtsController {
 	constructor(
 		private readonly artsService: ArtsService,
@@ -30,13 +31,17 @@ export class ArtsController {
 	 */
 	@Get()
 	async getAll(): Promise<ArtDTO[]> {
-		const arts = await this.artsService.getAll();
+		// TODO: Tokenからuser_id取得
+		const user_id: string = '0189481b-5f48-7000-8d09-6750c73c2413';
+		const arts = await this.artsService.getAll(user_id);
+
 		const result: ArtDTO[] = arts.map((art) => ({
 			'arts.id': art.id,
 			'arts.name': art.name,
 			'arts.address': art.address,
-			'arts.image_path': art.image_path,
+			'arts.image_path': art.image_path[0],
 			'authors.name': art.authors.name,
+			is_favorited: art.arts_users[0] ? true : false, // Prettierでシングルコーテーション外れる
 		}));
 		return result satisfies paths['/api/v1/arts']['get']['responses']['200']['content']['application/json'];
 	}
@@ -47,13 +52,16 @@ export class ArtsController {
 	 */
 	@Get('author')
 	async getAscByAuthor(): Promise<ArtDTO[]> {
-		const arts = await this.artsService.getAscByAuthor();
+		// TODO: Tokenからuser_id取得
+		const user_id: string = '0189481b-5f48-7000-8d09-6750c73c2413';
+		const arts = await this.artsService.getAscByAuthor(user_id);
 		const result: ArtDTO[] = arts.map((art) => ({
 			'arts.id': art.id,
 			'arts.name': art.name,
 			'arts.address': art.address,
-			'arts.image_path': art.image_path,
+			'arts.image_path': art.image_path[0],
 			'authors.name': art.authors.name,
+			is_favorited: art.arts_users[0] ? true : false, // Prettierでシングルコーテーション外れる
 		}));
 		return result satisfies paths['/api/v1/arts/author']['get']['responses']['200']['content']['application/json'];
 	}
@@ -74,7 +82,9 @@ export class ArtsController {
 		)
 		art_id: string,
 	): Promise<ArtDetailDTO> {
-		const artDetail = await this.artsService.getArtDetail(art_id);
+		// TODO: Tokenからuser_id取得
+		const user_id: string = '0189481b-5f48-7000-8d09-6750c73c2413';
+		const artDetail = await this.artsService.getArtDetail(art_id, user_id);
 		/**
 		 * 作品が存在しない場合
 		 * @throws paths['/api/v1/arts/{art_id}']['get']['responses']['404']
@@ -97,6 +107,7 @@ export class ArtsController {
 				artDetail.arts_institutions[0].institution.admission_fee_description,
 			'authors.name': artDetail.authors.name,
 			'authors.image_path': artDetail.authors.image_path,
+			is_favorited: artDetail.arts_users[0] ? true : false, // Prettierでシングルコーテーション外れる
 		} as const;
 
 		return result satisfies paths['/api/v1/arts/{art_id}']['get']['responses']['200']['content']['application/json'];
@@ -108,8 +119,6 @@ export class ArtsController {
 	 */
 	@HttpCode(200)
 	@Post(':art_id/favorite')
-	// TODO: Guard追加
-	// TODO: ユーザのTOKENが正しいか, ユーザとJWTトークンが一致しているか。
 	async favoriteArt(
 		/**
 		 * parametersで`art_id`取得
@@ -171,8 +180,6 @@ export class ArtsController {
 	 * @returns paths['/api/v1/arts/{art_id}/favorite']['delete']['responses']['200']
 	 */
 	@Delete(':art_id/favorite')
-	// TODO: Guard追加
-	// TODO: ユーザのTOKENが正しいか, ユーザとJWTトークンが一致しているか。
 	async deleteFavoriteByArtIdWithUserId(
 		/**
 		 * parametersで`art_id`取得
@@ -208,8 +215,6 @@ export class ArtsController {
 	 * @returns paths['/api/v1/arts/{user_id}/favorited']['get']['responses']['200']
 	 */
 	@Get(':user_id/favorited')
-	// TODO: Guard追加
-	// TODO: ユーザのTOKENが正しいか, ユーザとJWTトークンが一致しているか。
 	async getFavoriteByArtIdWithUserId(
 		@Param(
 			/**
@@ -236,13 +241,14 @@ export class ArtsController {
 		);
 		const artIds: string[] = favoriteArtId.map((item) => item.art_id);
 
-		const arts = await this.artsService.getFavoriteArtsByArtId(artIds);
+		const arts = await this.artsService.getFavoriteArtsByArtId(artIds, user_id);
 		const result: ArtDTO[] = arts.map((art) => ({
 			'arts.id': art.id,
 			'arts.name': art.name,
 			'arts.address': art.address,
-			'arts.image_path': art.image_path,
+			'arts.image_path': art.image_path[0],
 			'authors.name': art.authors.name,
+			is_favorited: false,
 		}));
 		return result satisfies paths['/api/v1/arts/{user_id}/favorited']['get']['responses']['200']['content']['application/json'];
 	}

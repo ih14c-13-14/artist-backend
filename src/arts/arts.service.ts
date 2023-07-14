@@ -8,7 +8,7 @@ import { ArtsUsers } from '@prisma/client';
 export class ArtsService {
 	constructor(private readonly prismaService: PrismaService) {}
 
-	async getAll(): Promise<ArtServiceResponse[]> {
+	async getAll(user_id: string): Promise<ArtServiceResponse[]> {
 		return await this.prismaService.arts.findMany({
 			select: {
 				id: true,
@@ -20,11 +20,19 @@ export class ArtsService {
 						name: true,
 					},
 				},
+				arts_users: {
+					select: {
+						art_id: true,
+					},
+					where: {
+						user_id,
+					},
+				},
 			},
 		});
 	}
 
-	async getAscByAuthor(): Promise<ArtServiceResponse[]> {
+	async getAscByAuthor(user_id: string): Promise<ArtServiceResponse[]> {
 		return await this.prismaService.arts.findMany({
 			select: {
 				id: true,
@@ -34,6 +42,14 @@ export class ArtsService {
 				authors: {
 					select: {
 						name: true,
+					},
+				},
+				arts_users: {
+					select: {
+						art_id: true,
+					},
+					where: {
+						user_id,
 					},
 				},
 			},
@@ -45,7 +61,10 @@ export class ArtsService {
 		});
 	}
 
-	async getArtDetail(art_id: string): Promise<artDetailServiceResponse> {
+	async getArtDetail(
+		art_id: string,
+		user_id: string,
+	): Promise<artDetailServiceResponse> {
 		return await this.prismaService.arts.findUnique({
 			select: {
 				id: true,
@@ -70,6 +89,14 @@ export class ArtsService {
 					select: {
 						name: true,
 						image_path: true,
+					},
+				},
+				arts_users: {
+					select: {
+						art_id: true,
+					},
+					where: {
+						user_id,
 					},
 				},
 			},
@@ -151,6 +178,7 @@ export class ArtsService {
 
 	async getFavoriteArtsByArtId(
 		artIds: string[],
+		user_id: string,
 	): Promise<ArtServiceResponse[]> {
 		return await this.prismaService.arts.findMany({
 			select: {
@@ -161,6 +189,14 @@ export class ArtsService {
 				authors: {
 					select: {
 						name: true,
+					},
+				},
+				arts_users: {
+					select: {
+						art_id: true,
+					},
+					where: {
+						user_id,
 					},
 				},
 			},
