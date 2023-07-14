@@ -21,6 +21,7 @@ import { PrefecturesService } from '@/prefectures/prefectures.service';
 import { SignUpPageChoicesDTO } from './dto/signup-page-choices';
 import { UserInfoDTO } from './dto/user-info';
 import { OtherChangePageChoices } from './dto/others-change-page-choices';
+import { PasswordChange } from './dto/password-change';
 
 @Controller('users')
 export class UsersController {
@@ -38,6 +39,18 @@ export class UsersController {
 		return (await this.usersService.getUserEmail(
 			updateUsersInput,
 		)) satisfies paths['/api/v1/users/password-reset']['post']['responses']['200']['content']['application/json'];
+	}
+	// パスワードリセット
+	@Put(':user_id/password-reset/verify')
+	async changePassword(
+		@Param(
+			'user_id' satisfies paths['/api/v1/users/{user_id}/password-reset/verify']['put']['parameters']['path']['user_id'],
+			new ParseUUIDPipe(),
+		)
+		id: string,
+		@Body() password: PasswordChange,
+	) {
+		return this.usersService.changePassword(id, password);
 	}
 
 	//パスワード変更処理
