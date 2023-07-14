@@ -140,7 +140,7 @@ export class UsersService {
 			//でーたベースにある現在のパスワードと一致しない
 			throw new HttpException(
 				{
-					message: '入力されて現在のパスワードが一致しません',
+					message: '入力された現在のパスワードが一致しません',
 				} satisfies paths['/api/v1/auth/signin']['post']['responses']['401']['content']['application/json'],
 				HttpStatus.UNAUTHORIZED,
 			);
