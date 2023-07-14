@@ -3,13 +3,13 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Token, TokenType, Users } from '@prisma/client';
 import { isNil } from 'lodash';
 import { EmailValidation } from './dto/email-validation';
-import { PasswordValidation } from './dto/password-validation';
 import { paths } from '@/generated/schema';
 import * as bcrypt from 'bcrypt';
 import { uuidv7 } from '@kripod/uuidv7';
 import { UserInfoResponse } from './dto/user-info-response';
 import { CurrentInfoResponse } from './dto/current-info-response';
 import { PasswordChange } from './dto/password-change';
+import { UpdatePasswordValidation } from './dto/update-password-validation';
 
 @Injectable()
 export class UsersService {
@@ -106,18 +106,55 @@ export class UsersService {
 		} as const;
 	}
 
-	// パスワード変更
+	// パスワード更新
 	async passwordUpdate(
 		id: string,
-		newPassword: PasswordValidation,
-	): Promise<Users> {
+		Password: UpdatePasswordValidation,
+	): Promise<{ message: string }> {
+		const user = await this.prismaService.users.findFirst({
+			where: { id: id },
+		});
+
+		if (!user) {
+			throw new HttpException(
+				{
+					type: 'validation',
+					message: [
+						{
+							property: 'user_id',
+							message: 'ユーザーidが存在しません',
+						},
+					],
+				} satisfies paths['/api/v1/users/{user_id}/password-reset/verify']['put']['responses']['400']['content']['application/json'],
+				HttpStatus.BAD_REQUEST,
+			);
+		}
+
 		const salt = await bcrypt.genSalt();
-		const hashPassword = await bcrypt.hash(newPassword.password, salt);
-		const changePassword = await this.prismaService.users.update({
+		const hashCurrentPassword = await bcrypt.hash(
+			Password.currentPassword,
+			salt,
+		);
+
+		if (!(user.password === hashCurrentPassword)) {
+			//でーたベースにある現在のパスワードと一致しない
+			throw new HttpException(
+				{
+					message: '入力されて現在のパスワードが一致しません',
+				} satisfies paths['/api/v1/auth/signin']['post']['responses']['401']['content']['application/json'],
+				HttpStatus.UNAUTHORIZED,
+			);
+		}
+
+		const hashPassword = await bcrypt.hash(Password.newPassword, salt);
+		await this.prismaService.users.update({
 			where: { id: id },
 			data: { password: hashPassword },
 		});
-		return changePassword;
+
+		return {
+			message: '成功',
+		} as const;
 	}
 
 	async getUserById(user_id: string): Promise<Users> {
