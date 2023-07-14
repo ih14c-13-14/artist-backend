@@ -1,14 +1,15 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Users } from '@prisma/client';
+import { Token, TokenType, Users } from '@prisma/client';
 import { isNil } from 'lodash';
 import { EmailValidation } from './dto/email-validation';
-import { PasswordChange } from './dto/password-change';
+import { PasswordValidation } from './dto/password-validation';
 import { paths } from '@/generated/schema';
 import * as bcrypt from 'bcrypt';
 import { uuidv7 } from '@kripod/uuidv7';
 import { UserInfoResponse } from './dto/user-info-response';
 import { CurrentInfoResponse } from './dto/current-info-response';
+import { PasswordChange } from './dto/password-change';
 
 @Injectable()
 export class UsersService {
@@ -41,10 +42,74 @@ export class UsersService {
 		} as const;
 	}
 
+	async checkToken(id: string, token) {
+		if (!token) {
+			throw new HttpException(
+				{
+					message: 'Forbidden.',
+				} satisfies paths['/api/v1/users/{user_id}/password-reset/verify']['put']['responses']['403']['content']['application/json'],
+				HttpStatus.FORBIDDEN,
+			);
+		}
+		if (
+			!(token.expired_at > new Date()) ||
+			!(token.type === TokenType.PASSWORD_RESET)
+		) {
+			throw new HttpException(
+				{
+					message: 'Forbidden.',
+				} satisfies paths['/api/v1/users/{user_id}/password-reset/verify']['put']['responses']['403']['content']['application/json'],
+				HttpStatus.FORBIDDEN,
+			);
+		}
+		if (!(token.user_id === id)) {
+			throw new HttpException(
+				{
+					message: 'Not Found.',
+				} satisfies paths['/api/v1/users/{user_id}/password-reset/verify']['put']['responses']['404']['content']['application/json'],
+				HttpStatus.NOT_FOUND,
+			);
+		}
+	}
+
+	async getToken(token: string): Promise<Token> {
+		return await this.prismaService.token.findFirst({
+			where: { token: token },
+		});
+	}
+
+	// パスワードリセット
+	async changePassword(id: string, password: PasswordChange) {
+		const salt = await bcrypt.genSalt();
+		const hashPassword = await bcrypt.hash(password.password, salt);
+		const user = await this.prismaService.users.update({
+			where: { id: id },
+			data: { email: hashPassword },
+		});
+
+		if (!user) {
+			throw new HttpException(
+				{
+					type: 'validation',
+					message: [
+						{
+							property: 'user_id',
+							message: 'ユーザーidが存在しません',
+						},
+					],
+				} satisfies paths['/api/v1/users/{user_id}/password-reset/verify']['put']['responses']['400']['content']['application/json'],
+				HttpStatus.BAD_REQUEST,
+			);
+		}
+		return {
+			message: '成功',
+		} as const;
+	}
+
 	// パスワード変更
-	async passwordChange(
+	async passwordUpdate(
 		id: string,
-		newPassword: PasswordChange,
+		newPassword: PasswordValidation,
 	): Promise<Users> {
 		const salt = await bcrypt.genSalt();
 		const hashPassword = await bcrypt.hash(newPassword.password, salt);
