@@ -72,8 +72,8 @@ export class AuthService {
 
 	async signIn(user: PasswordOmitUsers): Promise<string> {
 		const payload: JwtPayload = {
-			email: user.email,
 			sub: user.id,
+			email: user.email,
 		};
 		const accessToken = await this.jwtService.signAsync(payload);
 		return accessToken;
