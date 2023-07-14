@@ -1,9 +1,14 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
 export class EmailChange {
-	@IsEmail({})
+	@IsEmail(
+		{},
+		{
+			message: 'メールアドレスの形式が正しくありません',
+		},
+	)
 	@IsNotEmpty({
-		message: 'メールアドレスがありません',
+		message: 'メールアドレスが入力されていません',
 	})
 	email: string;
 
