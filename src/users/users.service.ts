@@ -1,6 +1,5 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Users } from '@prisma/client';
 import { InformationChangeValidation } from './dto/information-change-validation';
 import { Token, TokenType, Users } from '@prisma/client';
 import { isNil } from 'lodash';
