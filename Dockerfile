@@ -56,7 +56,10 @@ WORKDIR /artist
 COPY --chown=artist:artist --from=builder /artist/node_modules ./node_modules
 COPY --chown=artist:artist --from=builder /artist/dist ./dist
 COPY --chown=artist:artist --from=builder . ./
+COPY --link docker-entrypoint.sh /artist/docker-entrypoint.sh
+COPY --link --from=builder /artist/package.json /artist/package.json
+COPY --link --from=builder /artist/prisma /artist/prisma
 
 ENV NODE_ENV=production
 HEALTHCHECK --interval=5s --retries=20 CMD ["/bin/bash", "/artist/healthcheck.sh"]
-CMD ["node", "dist/main.js"]
+CMD ["/bin/bash", "/artist/docker-entrypoint.sh"]
