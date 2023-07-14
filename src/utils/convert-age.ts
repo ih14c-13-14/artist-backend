@@ -1,4 +1,4 @@
-export const ageMapping: Record<number, string> = {
+const ageMapping: Readonly<Record<number, string>> = {
 	1: '10代',
 	2: '20代',
 	3: '30代',

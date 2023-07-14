@@ -1,4 +1,4 @@
-export const genderMapping: Record<number, string> = {
+const genderMapping: Readonly<Record<number, string>> = {
 	1: '男性',
 	2: '女性',
 	9: 'その他',
