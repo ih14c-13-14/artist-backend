@@ -8,7 +8,7 @@ export class EmailChange {
 		},
 	)
 	@IsNotEmpty({
-		message: 'メールアドレスがありません',
+		message: 'メールアドレスが入力されていません',
 	})
 	email: string;
 
