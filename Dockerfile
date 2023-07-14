@@ -48,7 +48,8 @@ RUN corepack enable \
 	&& find / -type d -path /proc -prune -o -type f -perm /u+s -ignore_readdir_race -exec chmod u-s {} \; \
 	&& find / -type d -path /proc -prune -o -type f -perm /g+s -ignore_readdir_race -exec chmod g-s {} \; \
 	&& apt-get clean \
-	&& rm -rf /var/lib/apt/lists
+	&& rm -rf /var/lib/apt/lists \ 
+	&& mkdir -p /artist/.cache && chown -R artist:artist /artist/.cache
 
 USER artist
 WORKDIR /artist
