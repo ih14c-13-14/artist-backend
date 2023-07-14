@@ -1,5 +1,6 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InformationChangeValidation } from './dto/information-change-validation';
 import { Token, TokenType, Users } from '@prisma/client';
 import { isNil } from 'lodash';
 import { EmailValidation } from './dto/email-validation';
@@ -124,6 +125,23 @@ export class UsersService {
 		return await this.prismaService.users.findUnique({
 			where: {
 				id: user_id,
+			},
+		});
+	}
+
+	//他情報変更処理
+	async informationChange(
+		id: string,
+		informationInput: InformationChangeValidation,
+	) {
+		const { age_group, gender, prefecture } = informationInput;
+
+		return await this.prismaService.users.update({
+			where: { id: id },
+			data: {
+				age_group: Number(age_group),
+				gender: Number(gender),
+				prefecture_id: Number(prefecture),
 			},
 		});
 	}
