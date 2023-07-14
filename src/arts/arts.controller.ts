@@ -10,6 +10,7 @@ import {
 	Param,
 	ParseUUIDPipe,
 	Post,
+	UseGuards,
 } from '@nestjs/common';
 import { paths } from '@/generated/schema';
 import { ArtsService } from './arts.service';
@@ -17,6 +18,7 @@ import { ArtDTO } from './dto/art-dto';
 import { ArtDetailDTO } from './dto/art-detail';
 import { UserIdDTO } from './dto/user-id.dto';
 import { UsersService } from '@/users/users.service';
+import { JwtAuthGuard } from '@/auth/guards/jwt-auth.guard';
 @Controller('arts')
 export class ArtsController {
 	constructor(
@@ -108,7 +110,7 @@ export class ArtsController {
 	 */
 	@HttpCode(200)
 	@Post(':art_id/favorite')
-	// TODO: Guard追加
+	@UseGuards(JwtAuthGuard)
 	// TODO: ユーザのTOKENが正しいか, ユーザとJWTトークンが一致しているか。
 	async favoriteArt(
 		/**
