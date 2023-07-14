@@ -17,4 +17,5 @@ export type artDetailServiceResponse = {
 		name: string;
 		image_path: string;
 	};
+	arts_users: Array<{ art_id: string }> | [];
 };

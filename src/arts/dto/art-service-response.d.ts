@@ -6,4 +6,5 @@ export type ArtServiceResponse = {
 	authors: {
 		name: string;
 	};
+	arts_users: Array<{ art_id: string }> | [];
 };

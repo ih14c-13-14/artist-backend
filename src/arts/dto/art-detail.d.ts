@@ -11,4 +11,5 @@ export type ArtDetailDTO = {
 	'institutions.admission_fee_description': string;
 	'authors.name': string;
 	'authors.image_path': string;
+	is_favorited: boolean; // Prettierでシングルコーテーション外れる
 };
