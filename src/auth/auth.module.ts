@@ -4,7 +4,6 @@ import { AuthController } from './auth.controller';
 import { PrismaModule } from '@/prisma/prisma.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { TOKENS } from '@/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
@@ -13,14 +12,14 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 		PrismaModule,
 		PassportModule.register({ defaultStrategy: 'jwt' }),
 		JwtModule.register({
-			secret: TOKENS.ACCESS_TOKEN_SECRET,
+			secret: process.env.JWT_ACCESS_TOKEN_SECRET,
 			signOptions: {
-				expiresIn: TOKENS.ACCESS_EXPIRES_IN,
+				expiresIn: 3600,
 			},
 		}),
 	],
-	providers: [AuthService, JwtStrategy, JwtAuthGuard],
 	controllers: [AuthController],
+	providers: [AuthService, JwtStrategy, JwtAuthGuard],
 	exports: [JwtStrategy, JwtAuthGuard],
 })
 export class AuthModule {}

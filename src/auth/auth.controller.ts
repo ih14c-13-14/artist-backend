@@ -69,7 +69,7 @@ export class AuthController {
 	/**
 	 * サインイン
 	 * @param signInInput  ログイン情報
-	 * @returns {object}   JWTトークン
+	 * @returns string   JWTトークン
 	 */
 	@HttpCode(200)
 	@Post('signin')
