@@ -61,7 +61,10 @@ export class ArtsService {
 		});
 	}
 
-	async getArtDetail(art_id: string, user_id: string): Promise<artDetailServiceResponse> {
+	async getArtDetail(
+		art_id: string,
+		user_id: string,
+	): Promise<artDetailServiceResponse> {
 		return await this.prismaService.arts.findUnique({
 			select: {
 				id: true,
