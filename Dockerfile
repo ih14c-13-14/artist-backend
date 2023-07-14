@@ -26,7 +26,7 @@ RUN yarn install --frozen-lockfile --non-interactive --production=false \
 ARG NODE_ENV=production
 
 RUN git submodule update --init
-RUN pnpm build
+RUN yarn build
 RUN rm -rf .git/
 
 FROM --platform=$TARGETPLATFORM node:${NODE_VERSION}-slim AS runner
@@ -48,15 +48,18 @@ RUN corepack enable \
 	&& find / -type d -path /proc -prune -o -type f -perm /u+s -ignore_readdir_race -exec chmod u-s {} \; \
 	&& find / -type d -path /proc -prune -o -type f -perm /g+s -ignore_readdir_race -exec chmod g-s {} \; \
 	&& apt-get clean \
-	&& rm -rf /var/lib/apt/lists
+	&& rm -rf /var/lib/apt/lists \ 
+	&& mkdir -p /artist/.cache && chown -R artist:artist /artist/.cache
 
 USER artist
 WORKDIR /artist
 
 COPY --chown=artist:artist --from=builder /artist/node_modules ./node_modules
 COPY --chown=artist:artist --from=builder /artist/dist ./dist
-COPY --chown=artist:artist --from=builder . ./
+COPY --chown=artist:artist --from=builder /artist/prisma /artist/prisma
+COPY --chown=artist:artist --from=builder /artist/package.json /artist/package.json
+COPY --link docker-entrypoint.sh /artist/docker-entrypoint.sh
 
 ENV NODE_ENV=production
 HEALTHCHECK --interval=5s --retries=20 CMD ["/bin/bash", "/artist/healthcheck.sh"]
-CMD ["node", "dist/main.js"]
+CMD ["/bin/bash", "/artist/docker-entrypoint.sh"]

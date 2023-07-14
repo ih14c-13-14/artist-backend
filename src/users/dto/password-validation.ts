@@ -6,7 +6,7 @@ import {
 	MinLength,
 } from 'class-validator';
 
-export class PasswordChange {
+export class PasswordValidation {
 	@IsNotEmpty()
 	@IsString()
 	@MinLength(8, {
@@ -16,12 +16,8 @@ export class PasswordChange {
 		message: '32文字以下である必要があります。',
 	})
 	@Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{8,32}$/, {
+		// TODO: message考える
 		message: '次の形式と一致する必要があります:',
 	})
 	password: string;
-
-	@IsNotEmpty({
-		message: 'tokenがありません',
-	})
-	token: string;
 }

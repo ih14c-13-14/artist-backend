@@ -13,7 +13,7 @@ import { UsersService } from './users.service';
 import { Users } from '@prisma/client';
 import { paths } from '@/generated/schema';
 import { EmailValidation } from './dto/email-validation';
-import { PasswordChange } from './dto/password-change';
+import { PasswordValidation } from './dto/password-validation';
 import { convertNumberToAge, getAllAge } from '@/utils/convert-age';
 import { convertNumberToGender, getAllGender } from '@/utils/convert-gender';
 import { JwtStrategy } from '@/auth/strategies/jwt.strategy';
@@ -21,6 +21,7 @@ import { PrefecturesService } from '@/prefectures/prefectures.service';
 import { SignUpPageChoicesDTO } from './dto/signup-page-choices';
 import { UserInfoDTO } from './dto/user-info';
 import { OtherChangePageChoices } from './dto/others-change-page-choices';
+import { PasswordChange } from './dto/password-change';
 
 @Controller('users')
 export class UsersController {
@@ -39,6 +40,23 @@ export class UsersController {
 			email,
 		)) satisfies paths['/api/v1/users/password-reset']['post']['responses']['200']['content']['application/json'];
 	}
+	// パスワードリセット
+	@Put(':user_id/password-reset/verify')
+	async changePassword(
+		@Param(
+			'user_id' satisfies paths['/api/v1/users/{user_id}/password-reset/verify']['put']['parameters']['path']['user_id'],
+			new ParseUUIDPipe(),
+		)
+		id: string,
+		@Body() password: PasswordChange,
+	) {
+		const token = this.usersService.getToken(password.token);
+		this.usersService.checkToken(id, token);
+		return (await this.usersService.changePassword(
+			id,
+			password,
+		)) satisfies paths['/api/v1/users/{user_id}/password-reset/verify']['put']['responses']['200']['content']['application/json'];
+	}
 
 	//パスワード変更処理
 	@Put(':user_id/password-change')
@@ -48,9 +66,9 @@ export class UsersController {
 			new ParseUUIDPipe(),
 		)
 		id: string,
-		@Body() newPassword: PasswordChange,
+		@Body() newPassword: PasswordValidation,
 	): Promise<Users> {
-		return this.usersService.passwordChange(id, newPassword);
+		return this.usersService.passwordUpdate(id, newPassword);
 	}
 
 	//新しいメールアドレスの受け取り
