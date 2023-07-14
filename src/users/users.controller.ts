@@ -50,7 +50,12 @@ export class UsersController {
 		id: string,
 		@Body() password: PasswordChange,
 	) {
-		return this.usersService.changePassword(id, password);
+		const token = this.usersService.getToken(password.token);
+		this.usersService.checkToken(id, token);
+		return (await this.usersService.changePassword(
+			id,
+			password,
+		)) satisfies paths['/api/v1/users/{user_id}/password-reset/verify']['put']['responses']['200']['content']['application/json'];
 	}
 
 	//パスワード変更処理

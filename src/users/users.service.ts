@@ -1,6 +1,6 @@
 import { PrismaService } from '@/prisma/prisma.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Users } from '@prisma/client';
+import { Token, TokenType, Users } from '@prisma/client';
 import { isNil } from 'lodash';
 import { EmailValidation } from './dto/email-validation';
 import { PasswordValidation } from './dto/password-validation';
@@ -42,11 +42,7 @@ export class UsersService {
 		} as const;
 	}
 
-	// パスワードリセット
-	async changePassword(id: string, password: PasswordChange) {
-		const token = await this.prismaService.token.findFirst({
-			where: { token: password.token },
-		});
+	async checkToken(id: string, token) {
 		if (!token) {
 			throw new HttpException(
 				{
@@ -57,7 +53,7 @@ export class UsersService {
 		}
 		if (
 			!(token.expired_at > new Date()) ||
-			!(token.type === 'PASSWORD_RESET')
+			!(token.type === TokenType.PASSWORD_RESET)
 		) {
 			throw new HttpException(
 				{
@@ -74,7 +70,16 @@ export class UsersService {
 				HttpStatus.NOT_FOUND,
 			);
 		}
+	}
 
+	async getToken(token: string): Promise<Token> {
+		return await this.prismaService.token.findFirst({
+			where: { token: token },
+		});
+	}
+
+	// パスワードリセット
+	async changePassword(id: string, password: PasswordChange) {
 		const salt = await bcrypt.genSalt();
 		const hashPassword = await bcrypt.hash(password.password, salt);
 		const user = await this.prismaService.users.update({
@@ -96,6 +101,9 @@ export class UsersService {
 				HttpStatus.BAD_REQUEST,
 			);
 		}
+		return {
+			message: '成功',
+		} as const;
 	}
 
 	// パスワード変更
