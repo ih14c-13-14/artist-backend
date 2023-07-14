@@ -31,3 +31,11 @@ jobs:
       sha_short: ${{ needs.prepare.outputs.sha_short }}
       ref: main
     secrets: inherit
+  deploy-docker-hub:
+    uses: ./.github/workflows/push-to-dockerhub.yml
+    needs:
+      - prepare
+    with:
+      sha_short: ${{ needs.prepare.outputs.sha_short }}
+      ref: main
+    secrets: inherit
