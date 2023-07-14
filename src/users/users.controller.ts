@@ -77,7 +77,10 @@ export class UsersController {
 		id: string,
 		@Body() email: EmailChange,
 	) {
-		return this.usersService.changeEmail(id, email);
+		return (await this.usersService.changeEmail(
+			id,
+			email,
+		)) satisfies paths['/api/v1/users/{user_id}/email-change/verify']['put']['responses']['200']['content']['application/json'];
 	}
 
 	/**

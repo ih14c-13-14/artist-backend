@@ -169,6 +169,9 @@ export class UsersService {
 				HttpStatus.BAD_REQUEST,
 			);
 		}
+		return {
+			message: '成功',
+		} as const;
 	}
 
 	async getUserInfoByUserId(user_id: string): Promise<UserInfoResponse> {
