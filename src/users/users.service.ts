@@ -130,22 +130,21 @@ export class UsersService {
 			);
 		}
 
-		const salt = await bcrypt.genSalt();
-		const hashCurrentPassword = await bcrypt.hash(
+		const isPasswordMatching = await bcrypt.compare(
 			Password.currentPassword,
-			salt,
+			user.password,
 		);
 
-		if (!(user.password === hashCurrentPassword)) {
-			//でーたベースにある現在のパスワードと一致しない
+		if (!isPasswordMatching) {
 			throw new HttpException(
 				{
-					message: '入力されて現在のパスワードが一致しません',
+					message: '入力された現在のパスワードが一致しません',
 				} satisfies paths['/api/v1/auth/signin']['post']['responses']['401']['content']['application/json'],
 				HttpStatus.UNAUTHORIZED,
 			);
 		}
 
+		const salt = await bcrypt.genSalt();
 		const hashPassword = await bcrypt.hash(Password.newPassword, salt);
 		await this.prismaService.users.update({
 			where: { id: id },

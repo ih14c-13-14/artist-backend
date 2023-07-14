@@ -65,11 +65,11 @@ export class UsersController {
 			new ParseUUIDPipe(),
 		)
 		id: string,
-		@Body() Password: UpdatePasswordValidation,
+		@Body() password: UpdatePasswordValidation,
 	): Promise<{ message: string }> {
 		return (await this.usersService.passwordUpdate(
 			id,
-			Password,
+			password,
 		)) satisfies paths['/api/v1/users/{user_id}/password-change']['put']['responses']['200']['content']['application/json'];
 	}
 

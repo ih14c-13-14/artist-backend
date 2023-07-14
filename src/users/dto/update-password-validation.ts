@@ -7,7 +7,6 @@ import {
 } from 'class-validator';
 
 export class UpdatePasswordValidation {
-	@IsNotEmpty()
 	@IsString()
 	@MinLength(8, {
 		message: '8文字以上である必要があります。',
@@ -18,10 +17,13 @@ export class UpdatePasswordValidation {
 	@Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{8,32}$/, {
 		// TODO: message考える
 		message: '次の形式と一致する必要があります:',
+	})
+	@IsNotEmpty({
+		message: 'パスワードを入力してください',
 	})
 	newPassword: string;
 
-	@IsNotEmpty()
+	// Todo 長さやMatchesいる？
 	@IsString()
 	@MinLength(8, {
 		message: '8文字以上である必要があります。',
@@ -32,6 +34,9 @@ export class UpdatePasswordValidation {
 	@Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]{8,32}$/, {
 		// TODO: message考える
 		message: '次の形式と一致する必要があります:',
+	})
+	@IsNotEmpty({
+		message: 'パスワードを入力してください',
 	})
 	currentPassword: string;
 }
